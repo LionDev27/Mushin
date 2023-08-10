@@ -8,6 +8,7 @@ public class PlayerInputs : PlayerComponents
     public Vector2 AimDir { get; private set; }
     public Vector2 AimUnitaryDir { get; private set; }
     public Action OnDashPerformed;
+    public Action OnAttackPerformed;
 
     private PlayerInput _playerInput;
     private Camera _camera;
@@ -41,23 +42,31 @@ public class PlayerInputs : PlayerComponents
         aimDirection.Normalize();
         AimDir = aimDirection;
 
-        Vector2 aimUnitaryDirection = new Vector2();
-        aimUnitaryDirection.x = Mathf.Sign(aimDirection.x);
-        aimUnitaryDirection.y = Mathf.Sign(aimDirection.y);
+        Vector2 aimUnitaryDirection = Mathf.Abs(aimDirection.x) > Mathf.Abs(aimDirection.y) ?
+            new Vector2(Mathf.Sign(aimDirection.x), 0) :
+            new Vector2(0, Mathf.Sign(aimDirection.y));
         aimUnitaryDirection.Normalize();
         AimUnitaryDir = aimUnitaryDirection;
     }
     
     private void OnAimDirection(InputValue value)
     {
-        if (CurrentInput() != InputType.Gamepad) return;
+        if (CurrentInput() != InputType.Gamepad || value.Get<Vector2>() == Vector2.zero) return;
         AimDir = value.Get<Vector2>();
     }
 
     private void OnAimUnitaryDirection(InputValue value)
     {
-        if (CurrentInput() != InputType.Gamepad) return;
-        AimUnitaryDir = value.Get<Vector2>();
+        if (CurrentInput() != InputType.Gamepad || value.Get<Vector2>() == Vector2.zero) return;
+        Vector2 unitaryDir = value.Get<Vector2>();
+        AimUnitaryDir = Mathf.Abs(unitaryDir.x) > Mathf.Abs(unitaryDir.y) ?
+            new Vector2(Mathf.Sign(unitaryDir.x), 0) :
+            new Vector2(0, Mathf.Sign(unitaryDir.y));
+    }
+
+    private void OnAttack()
+    {
+        OnAttackPerformed();
     }
 
     public InputType CurrentInput()

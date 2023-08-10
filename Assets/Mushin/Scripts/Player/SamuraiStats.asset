@@ -16,8 +16,14 @@ MonoBehaviour:
     health: 3
     dashAmount: 2
     dashCooldown: 7.5
+    dashForce: 5
     moveSpeed: 55
     attackDamage: 12
-    skillDamagePercentage: 100
-    criticalChancePercentage: 5
-    criticalMultiplierPercentage: 150
+    attackSpeed: 1
+    attackPrefab: {fileID: 633339760732158394, guid: f1ff473bc4a8d544db15d4bf4da04a55, type: 3}
+    skillDamage: 20
+    skillCooldown: 10
+    criticalDamageMultiplier: 2
+    criticalChancePercentage: 15
+    collectionRange: 10
+    xpModifier: 1

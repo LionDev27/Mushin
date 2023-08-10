@@ -6,6 +6,7 @@ public class PlayerComponents : MonoBehaviour
     public Rigidbody2D Rigidbody { get; private set; }
     public PlayerLevel PlayerLevel { get; private set; }
     public PlayerMovement PlayerMovement { get; private set; }
+    public PlayerDash PlayerDash { get; private set; }
     
     protected virtual void Awake()
     {
@@ -13,5 +14,6 @@ public class PlayerComponents : MonoBehaviour
         Rigidbody = GetComponent<Rigidbody2D>();
         PlayerLevel = GetComponent<PlayerLevel>();
         PlayerMovement = GetComponent<PlayerMovement>();
+        PlayerDash = GetComponent<PlayerDash>();
     }
 }
