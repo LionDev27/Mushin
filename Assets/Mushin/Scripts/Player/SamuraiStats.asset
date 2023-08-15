@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stats:
     health: 3
+    invulnerabilitySeconds: 1
     dashAmount: 2
     dashCooldown: 7.5
     dashForce: 5

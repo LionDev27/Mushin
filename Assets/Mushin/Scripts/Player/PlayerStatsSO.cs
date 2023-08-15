@@ -11,6 +11,8 @@ public class PlayerStatsSO : ScriptableObject
 public struct PlayerStats
 {
     public int health;
+    [Tooltip("Tiempo en segundos que el jugador es invencible a ataques. Se activa después de ser atacado.")]
+    public float invulnerabilitySeconds;
     public int dashAmount;
     public float dashCooldown;
     public float dashForce;

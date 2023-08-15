@@ -1,15 +1,17 @@
+using System;
 using UnityEngine;
 
 public abstract class Damageable : MonoBehaviour
 {
-    [SerializeField] private float _maxHealth;
+    private float _maxHealth;
     private float _currentHealth;
 
-    private void Start()
+    public void SetHealth(float amount)
     {
+        _maxHealth = amount;
         _currentHealth = _maxHealth;
     }
-
+    
     public virtual void TakeDamage(float damage)
     {
         _currentHealth -= damage;
