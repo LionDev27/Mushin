@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1793673708}
   - component: {fileID: 8919897314703391165}
   m_Layer: 0
-  m_Name: XP
+  m_Name: XPOrb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

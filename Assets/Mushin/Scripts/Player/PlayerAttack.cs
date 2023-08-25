@@ -26,10 +26,10 @@ public class PlayerAttack : PlayerComponents
     {
         if (!CanAttack()) return;
         SetTimer();
-        _currentAttack._currentDamage = PlayerLevel.playerStats.attackDamage;
+        _currentAttack._currentDamage = PlayerLevel._playerStatsData.attackDamage;
         if (IsCritical())
         {
-            _currentAttack._currentDamage *= PlayerLevel.playerStats.criticalDamageMultiplier;
+            _currentAttack._currentDamage *= PlayerLevel._playerStatsData.criticalDamageMultiplier;
             Debug.Log("Critical Hit!");
         }
         _currentAttack.Attack();
@@ -38,7 +38,7 @@ public class PlayerAttack : PlayerComponents
     private bool IsCritical()
     {
         float randomValue = Random.Range(0f, 100f);
-        return randomValue <= PlayerLevel.playerStats.criticalChancePercentage;
+        return randomValue <= PlayerLevel._playerStatsData.criticalChancePercentage;
     }
     
     private bool CanAttack()
@@ -53,12 +53,12 @@ public class PlayerAttack : PlayerComponents
 
     private void SetTimer()
     {
-        _timer = PlayerLevel.playerStats.attackSpeed;
+        _timer = PlayerLevel._playerStatsData.AttackCooldown();
     }
 
     private void InstantiateAttack()
     {
-        var attackPrefab = PlayerLevel.playerStats.attackPrefab;
+        var attackPrefab = PlayerLevel._playerStatsData.attackPrefab;
         if (!attackPrefab)
         {
             Debug.LogWarning("Attack prefab not set on PlayerStats");

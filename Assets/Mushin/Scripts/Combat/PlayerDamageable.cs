@@ -15,8 +15,8 @@ public class PlayerDamageable : Damageable
 
     private void Start()
     {
-        _invulnerabilityTime = _playerComponents.PlayerLevel.playerStats.invulnerabilitySeconds;
-        SetHealth(_playerComponents.PlayerLevel.playerStats.health);
+        _invulnerabilityTime = _playerComponents.PlayerLevel._playerStatsData.invulnerabilitySeconds;
+        SetHealth(_playerComponents.PlayerLevel._playerStatsData.health);
     }
 
     private void Update()

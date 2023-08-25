@@ -1,11 +1,8 @@
-using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerDash : PlayerComponents
 {
-    [SerializeField] private TextMeshProUGUI _dashesCountText;
     [SerializeField] private Image _dashCooldownImage;
     [SerializeField] private float _dashingTime;
     private float _dashTimer;
@@ -20,7 +17,7 @@ public class PlayerDash : PlayerComponents
 
     private void Start()
     {
-        _currentDashAmount = PlayerLevel.playerStats.dashAmount;
+        ResetDashes();
     }
 
     private void Update()
@@ -33,21 +30,26 @@ public class PlayerDash : PlayerComponents
         else
             _dashTimer -= Time.deltaTime;
 
-        if (_currentDashAmount < PlayerLevel.playerStats.dashAmount)
+        if (_currentDashAmount < PlayerLevel._playerStatsData.dashAmount)
         {
             _dashRecoveryTimer += Time.deltaTime;
-            _dashCooldownImage.fillAmount = _dashRecoveryTimer / PlayerLevel.playerStats.dashCooldown;
-            if (_dashRecoveryTimer > PlayerLevel.playerStats.dashCooldown)
+            _dashCooldownImage.fillAmount = _dashRecoveryTimer / PlayerLevel._playerStatsData.dashCooldown;
+            if (_dashRecoveryTimer > PlayerLevel._playerStatsData.dashCooldown)
             {
                 _currentDashAmount++;
-                if (_currentDashAmount < PlayerLevel.playerStats.dashAmount)
+                if (_currentDashAmount < PlayerLevel._playerStatsData.dashAmount)
                     ResetRecoveryTimer();
             }
         }
         else
             _dashCooldownImage.fillAmount = 0f;
 
-        _dashesCountText.text = $"Dashes: {_currentDashAmount}";
+        PlayerUI.Instance.UpdateDashUI(_currentDashAmount);
+    }
+
+    public void ResetDashes()
+    {
+        _currentDashAmount = PlayerLevel._playerStatsData.dashAmount;
     }
     
     public bool IsDashing()
@@ -81,7 +83,7 @@ public class PlayerDash : PlayerComponents
         ResetCooldown();
         ResetRecoveryTimer();
         
-        Rigidbody.AddForce(dashDir * PlayerLevel.playerStats.dashForce * 100f * extraForce);
+        Rigidbody.AddForce(dashDir * PlayerLevel._playerStatsData.dashForce * 100f * extraForce);
     }
 
     private void ResetCooldown()
@@ -91,7 +93,7 @@ public class PlayerDash : PlayerComponents
 
     private void ResetRecoveryTimer()
     {
-        if (_dashRecoveryTimer > PlayerLevel.playerStats.dashCooldown)
+        if (_dashRecoveryTimer > PlayerLevel._playerStatsData.dashCooldown)
             _dashRecoveryTimer = 0;
     }
 }

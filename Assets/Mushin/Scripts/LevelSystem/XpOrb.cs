@@ -10,7 +10,7 @@ public class XpOrb : MonoBehaviour
     private Transform target;
     private bool hasTarget;
     
-    public static Action<float> OnXpOrbCollected;
+    public static Action<int> OnXpOrbCollected;
 
     private void Awake()
     {

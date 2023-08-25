@@ -15,7 +15,7 @@ public class PlayerMovement : PlayerComponents
 
     private void Move()
     {
-        Rigidbody.velocity = PlayerLevel.playerStats.moveSpeed * 10f * Time.deltaTime * PlayerInputController.MoveDirection;
+        Rigidbody.velocity = PlayerLevel._playerStatsData.moveSpeed * 10f * Time.deltaTime * PlayerInputController.MoveDirection;
     }
 
     public void EnableMovement(bool value)
