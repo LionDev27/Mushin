@@ -10,16 +10,17 @@ public abstract class EnemyAgent : MonoBehaviour
     [HideInInspector]
     public NavMeshAgent navMeshAgent;
 
-    [SerializeField] private List<EnemyState> _states;
-    [SerializeField] private EnemyStats _stats;
+    public List<EnemyState> states;
+    
+    public EnemyStats stats;
     private EnemyDamageable _damageable;
     private EnemyState _currentState;
     private PlayerDamageable _playerDamageable;
 
     protected virtual void Awake()
     {
-        if (_states.Count <= 0) return;
-        foreach (var state in _states)
+        if (states.Count <= 0) return;
+        foreach (var state in states)
         {
             state.Setup(this);
         }
@@ -33,11 +34,11 @@ public abstract class EnemyAgent : MonoBehaviour
     {
         navMeshAgent.updateRotation = false;
         navMeshAgent.updateUpAxis = false;
-        navMeshAgent.speed = _stats.speed / 3;
+        navMeshAgent.speed = stats.speed / 3;
         
-        _damageable.SetHealth(_stats.health);
+        _damageable.SetHealth(stats.health);
         
-        ChangeState(_states[0]);
+        ChangeState(states[0]);
     }
 
     protected virtual void Update()
@@ -45,10 +46,10 @@ public abstract class EnemyAgent : MonoBehaviour
         if (_currentState)
             _currentState.Execute();
         if (_playerDamageable)
-            _playerDamageable.TakeDamage(_stats.attackDamage);
+            _playerDamageable.TakeDamage(stats.attackDamage);
     }
 
-    protected virtual void ChangeState(EnemyState newState)
+    public virtual void ChangeState(EnemyState newState)
     {
         _currentState = newState;
         _currentState.OnStateEnter();
@@ -63,6 +64,18 @@ public abstract class EnemyAgent : MonoBehaviour
     public void SetDestination(Vector3 pos)
     {
         navMeshAgent.destination = pos;
+    }
+
+    public float TargetDistance()
+    {
+        return Vector2.Distance(transform.position, target.position);
+    }
+
+    public Vector2 TargetDir()
+    {
+        Vector2 dir = target.position - transform.position;
+        dir.Normalize();
+        return dir;
     }
 
     private void OnTriggerEnter2D(Collider2D col)

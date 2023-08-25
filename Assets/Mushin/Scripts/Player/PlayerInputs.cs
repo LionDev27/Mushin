@@ -69,9 +69,21 @@ public class PlayerInputs : PlayerComponents
         OnAttackPerformed();
     }
 
+    public Vector2 MoveUnitaryDir()
+    {
+        return Mathf.Abs(MoveDirection.x) > Mathf.Abs(MoveDirection.y) ?
+            new Vector2(Mathf.Sign(MoveDirection.x), 0) :
+            new Vector2(0, Mathf.Sign(MoveDirection.y));
+    }
+
     public InputType CurrentInput()
     {
         return _playerInput.currentControlScheme == "Gamepad" ? InputType.Gamepad : InputType.Keyboard;
+    }
+
+    public bool IsMoving()
+    {
+        return MoveDirection != Vector2.zero;
     }
 }
 

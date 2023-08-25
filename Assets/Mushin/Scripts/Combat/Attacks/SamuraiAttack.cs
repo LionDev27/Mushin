@@ -21,9 +21,12 @@ public class SamuraiAttack : AttackBase
             _collider.enabled = false;
             transform.localPosition = Vector2.zero;
         }
-        //TODO: Comprobar si, es con mando, usar dirección de movimiento si es distinta de cero.
+        
         Vector2 newPos = transform.localPosition;
-        newPos += _playerInput.AimUnitaryDir * _range * 1.2f;
+        Vector2 dir = _playerInput.CurrentInput() == InputType.Gamepad && _playerInput.IsMoving()
+            ? _playerInput.MoveUnitaryDir()
+            : _playerInput.AimUnitaryDir;
+        newPos += dir * _range * 1.2f;
         transform.localPosition = newPos;
         StartCoroutine(AttackAnimation());
     }

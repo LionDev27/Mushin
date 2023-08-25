@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &7059202070974409719
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 284655646540141122, guid: a741feabb145ce44bb9815ad4baa34a0, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 284655646540141122, guid: a741feabb145ce44bb9815ad4baa34a0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 284655646540141122, guid: a741feabb145ce44bb9815ad4baa34a0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 11.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 284655646540141122, guid: a741feabb145ce44bb9815ad4baa34a0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 284655646540141122, guid: a741feabb145ce44bb9815ad4baa34a0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 284655646540141122, guid: a741feabb145ce44bb9815ad4baa34a0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 284655646540141122, guid: a741feabb145ce44bb9815ad4baa34a0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 284655646540141122, guid: a741feabb145ce44bb9815ad4baa34a0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 284655646540141122, guid: a741feabb145ce44bb9815ad4baa34a0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 284655646540141122, guid: a741feabb145ce44bb9815ad4baa34a0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 284655646540141122, guid: a741feabb145ce44bb9815ad4baa34a0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 284655646540141123, guid: a741feabb145ce44bb9815ad4baa34a0, type: 3}
+      propertyPath: m_Name
+      value: RangedEnemy
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a741feabb145ce44bb9815ad4baa34a0, type: 3}
+--- !u!1 &7062803293062576564 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 284655646540141123, guid: a741feabb145ce44bb9815ad4baa34a0, type: 3}
+  m_PrefabInstance: {fileID: 7059202070974409719}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7059202071016581629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7062803293062576564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f800cb5162d14a3f82a93fcabb6fa556, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bulletPrefab: {fileID: 172039450177058494, guid: 1c57ceddf2120b3488f8c86801665de7, type: 3}
+  _bulletSpeed: 3
+  _cooldown: 1
+--- !u!114 &7059202071016581630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7062803293062576564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d757ab84cba40a58f1909eba21c16cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7059202071016581631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7062803293062576564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c20be713895ecdd43b55460e8b81ab08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  navMeshAgent: {fileID: 0}
+  states:
+  - {fileID: 7059202071016581630}
+  - {fileID: 7059202071016581629}
+  stats: {fileID: 11400000, guid: d157071e1de90a84591e6003acf948fb, type: 2}
+  distanceToAttackPlayer: 6

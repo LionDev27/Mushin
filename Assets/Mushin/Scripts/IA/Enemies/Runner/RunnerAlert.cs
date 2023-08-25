@@ -1,9 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class RunnerAlert : EnemyState
 {
+    private EnemyAgent _agent;
+
+    public override void Setup(EnemyAgent agent)
+    {
+        _agent = agent;
+    }
+
     public override void OnStateEnter()
     {
         _agent.SetDestination(_agent.target.position);
