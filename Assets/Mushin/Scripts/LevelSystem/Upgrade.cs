@@ -5,29 +5,31 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class Upgrade : MonoBehaviour
 {
-    [HideInInspector]
-    public UpgradeData data;
+    private UpgradeData _data;
 
     [SerializeField] private Image _sprite;
     [SerializeField] private TextMeshProUGUI _title, _description;
 
-    private void Awake()
-    {
-        UpgradeData[] allData = Resources.LoadAll<UpgradeData>("Upgrades");
-        int randomDataIndex = Random.Range(0, allData.Length);
-        data = allData[randomDataIndex];
-    }
-
     private void Start()
     {
-        _sprite.sprite = data.sprite;
-        _title.text = data.title;
-        _description.text = data.description;
+        _sprite.sprite = _data.sprite;
+        _title.text = _data.title;
+        _description.text = _data.description;
+    }
+
+    public void SetData(UpgradeData data)
+    {
+        _data = data;
+    }
+
+    public UpgradeData GetData()
+    {
+        return _data;
     }
 
     public void UpgradeStat()
     {
-        PlayerUpgrades.OnUpgrade?.Invoke(data);
-        PlayerUI.Instance.ShowUpgradeUI(false);
+        PlayerUpgrades.OnUpgrade?.Invoke(_data);
+        PlayerUI.Instance.UpgradeComplete();
     }
 }

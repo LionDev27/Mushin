@@ -7,9 +7,14 @@ public class PlayerComponents : MonoBehaviour
     public PlayerLevel PlayerLevel { get; private set; }
     public PlayerMovement PlayerMovement { get; private set; }
     public PlayerDash PlayerDash { get; private set; }
+
+    public static PlayerComponents Instance;
     
     protected virtual void Awake()
     {
+        if (!Instance)
+            Instance = this;
+        
         PlayerInputController = GetComponent<PlayerInputs>();
         Rigidbody = GetComponent<Rigidbody2D>();
         PlayerLevel = GetComponent<PlayerLevel>();

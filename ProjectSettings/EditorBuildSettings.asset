@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Mushin/Scenes/MainMenu.unity
+    guid: a9078c24a1a17b54d99bc0a66fff0265
+  - enabled: 1
     path: Assets/Mushin/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   m_configObjects: {}

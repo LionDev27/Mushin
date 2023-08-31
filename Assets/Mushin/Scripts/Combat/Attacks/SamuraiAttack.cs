@@ -23,9 +23,10 @@ public class SamuraiAttack : AttackBase
         }
         
         Vector2 newPos = transform.localPosition;
-        Vector2 dir = _playerInput.CurrentInput() == InputType.Gamepad && _playerInput.IsMoving()
+        Vector2 dir = _playerInput.CurrentInput() == InputType.Gamepad && _playerInput.IsMoving() && !_playerInput.IsAiming
             ? _playerInput.MoveUnitaryDir()
             : _playerInput.AimUnitaryDir;
+        
         newPos += dir * _range * 1.2f;
         transform.localPosition = newPos;
         StartCoroutine(AttackAnimation());

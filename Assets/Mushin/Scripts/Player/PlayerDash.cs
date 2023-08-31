@@ -66,10 +66,6 @@ public class PlayerDash : PlayerComponents
         float extraForce = 1f;
         if (moveDir != Vector2.zero)
             dashDir = moveDir;
-        else if (PlayerInputController.CurrentInput() == InputType.Gamepad)
-        {
-            //TODO: Hacer modificaciones si no se está moviendo y está jugando con mando.
-        }
         else
         {
             dashDir = PlayerInputController.AimDir;

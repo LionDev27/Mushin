@@ -30,6 +30,7 @@ public class PlayerLevel : PlayerComponents
         _playerUI.UpdateLevelUI(_currentLevel, _currentXP, _currentXPNeeded);
     }
 
+    [ContextMenu("Level Up")]
     private void LevelUp()
     {
         _currentLevel++;

@@ -35,7 +35,7 @@ public class XpOrb : MonoBehaviour
     
     public void Collect()
     {
-        Destroy(gameObject);
         OnXpOrbCollected?.Invoke(_xpToAdd);
+        ObjectPooler.Instance.ReturnToPool("xp", gameObject);
     }
 }
