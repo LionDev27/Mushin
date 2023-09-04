@@ -30,14 +30,14 @@ public class PlayerDash : PlayerComponents
         else
             _dashTimer -= Time.deltaTime;
 
-        if (_currentDashAmount < PlayerLevel._playerStatsData.dashAmount)
+        if (_currentDashAmount < PlayerLevel.Stats.dashAmount)
         {
             _dashRecoveryTimer += Time.deltaTime;
-            _dashCooldownImage.fillAmount = _dashRecoveryTimer / PlayerLevel._playerStatsData.dashCooldown;
-            if (_dashRecoveryTimer > PlayerLevel._playerStatsData.dashCooldown)
+            _dashCooldownImage.fillAmount = _dashRecoveryTimer / PlayerLevel.Stats.dashCooldown;
+            if (_dashRecoveryTimer > PlayerLevel.Stats.dashCooldown)
             {
                 _currentDashAmount++;
-                if (_currentDashAmount < PlayerLevel._playerStatsData.dashAmount)
+                if (_currentDashAmount < PlayerLevel.Stats.dashAmount)
                     ResetRecoveryTimer();
             }
         }
@@ -49,7 +49,7 @@ public class PlayerDash : PlayerComponents
 
     public void ResetDashes()
     {
-        _currentDashAmount = PlayerLevel._playerStatsData.dashAmount;
+        _currentDashAmount = PlayerLevel.Stats.dashAmount;
     }
     
     public bool IsDashing()
@@ -79,7 +79,7 @@ public class PlayerDash : PlayerComponents
         ResetCooldown();
         ResetRecoveryTimer();
         
-        Rigidbody.AddForce(dashDir * PlayerLevel._playerStatsData.dashForce * 100f * extraForce);
+        Rigidbody.AddForce(dashDir * PlayerLevel.Stats.dashForce * 100f * extraForce);
     }
 
     private void ResetCooldown()
@@ -89,7 +89,7 @@ public class PlayerDash : PlayerComponents
 
     private void ResetRecoveryTimer()
     {
-        if (_dashRecoveryTimer > PlayerLevel._playerStatsData.dashCooldown)
+        if (_dashRecoveryTimer > PlayerLevel.Stats.dashCooldown)
             _dashRecoveryTimer = 0;
     }
 }

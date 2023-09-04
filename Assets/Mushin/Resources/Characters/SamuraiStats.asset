@@ -12,20 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16879f8fde2180544ada89b70355e1df, type: 3}
   m_Name: SamuraiStats
   m_EditorClassIdentifier: 
-  health: 3
-  invulnerabilitySeconds: 1
-  dashAmount: 2
-  dashCooldown: 7.5
-  dashForce: 5
-  moveSpeed: 55
-  attackDamage: 12
-  attackSpeed: 5
-  attackRange: 0
-  attackReach: 0
-  attackPrefab: {fileID: 633339760732158394, guid: f1ff473bc4a8d544db15d4bf4da04a55, type: 3}
-  skillDamage: 20
-  skillCooldown: 10
-  criticalDamageMultiplier: 2
-  criticalChancePercentage: 15
-  collectionRange: 10
-  xpModifier: 1
+  Stats:
+    health: 3
+    invulnerabilitySeconds: 1
+    dashAmount: 2
+    dashCooldown: 7.5
+    dashForce: 5
+    moveSpeed: 55
+    attackDamage: 12
+    attackSpeed: 5
+    attackRange: 0
+    attackReach: 0
+    attackPrefab: {fileID: 633339760732158394, guid: f1ff473bc4a8d544db15d4bf4da04a55, type: 3}
+    skillDamage: 20
+    skillCooldown: 10
+    criticalDamageMultiplier: 2
+    criticalChancePercentage: 15
+    collectionRange: 10
+    xpModifier: 1
+    _objectiveSpeed: 5

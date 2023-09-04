@@ -15,3 +15,5 @@ MonoBehaviour:
   health: 20
   speed: 20
   attackDamage: 1
+  xpOrbTag: basicXP
+  xpAmount: 2

@@ -6,4 +6,6 @@ public class EnemyStats : ScriptableObject
     public int health;
     public float speed;
     public float attackDamage;
+    public string xpOrbTag;
+    public int xpAmount;
 }

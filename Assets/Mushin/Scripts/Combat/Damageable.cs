@@ -1,10 +1,9 @@
-using System;
 using UnityEngine;
 
 public abstract class Damageable : MonoBehaviour
 {
-    private float _maxHealth;
-    private float _currentHealth;
+    protected float _maxHealth;
+    protected float _currentHealth;
 
     public void SetHealth(float amount)
     {

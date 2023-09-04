@@ -15,8 +15,10 @@ public class PlayerDamageable : Damageable
 
     private void Start()
     {
-        _invulnerabilityTime = _playerComponents.PlayerLevel._playerStatsData.invulnerabilitySeconds;
-        SetHealth(_playerComponents.PlayerLevel._playerStatsData.health);
+        _invulnerabilityTime = _playerComponents.PlayerLevel.Stats.invulnerabilitySeconds;
+        SetHealth(_playerComponents.PlayerLevel.Stats.health);
+        for (int i = 0; i < _currentHealth; i++)
+            HeartsContainer.OnAddHeart?.Invoke();
     }
 
     private void Update()
@@ -30,6 +32,7 @@ public class PlayerDamageable : Damageable
         if (!CanTakeDamage()) return;
         base.TakeDamage(damage);
         _timer = _invulnerabilityTime;
+        HeartsContainer.OnEnableHeart?.Invoke(false);
         StartCoroutine(HitAnimation());
     }
 
@@ -40,7 +43,7 @@ public class PlayerDamageable : Damageable
 
     protected override void Die()
     {
-        Debug.Log("Muelto");
+        GameController.OnPlayerDead?.Invoke();
     }
 
     private IEnumerator HitAnimation()

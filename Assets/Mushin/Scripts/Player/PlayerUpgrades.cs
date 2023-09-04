@@ -9,27 +9,28 @@ public class PlayerUpgrades : PlayerComponents
         switch (data.stat)
         {
             case Stats.Health:
-                PlayerLevel._playerStatsData.health += (int)data.value;
+                PlayerLevel.Stats.health += (int)data.value;
+                HeartsContainer.OnAddHeart?.Invoke();
                 break;
             case Stats.MoveSpeed:
-                PlayerLevel._playerStatsData.moveSpeed += data.value;
+                PlayerLevel.Stats.moveSpeed += data.value;
                 break;
             case Stats.DashAmount:
-                PlayerLevel._playerStatsData.dashAmount += (int)data.value;
+                PlayerLevel.Stats.dashAmount += (int)data.value;
                 PlayerDash.ResetDashes();
                 break;
             case Stats.DashCooldown:
-                PlayerLevel._playerStatsData.dashCooldown += data.value;
+                PlayerLevel.Stats.dashCooldown += data.value;
                 break;
             case Stats.AttackDamage:
-                PlayerLevel._playerStatsData.attackDamage += data.value;
+                PlayerLevel.Stats.attackDamage += data.value;
                 break;
             case Stats.AttackRange:
                 break;
             case Stats.AttackReach:
                 break;
             case Stats.AttackSpeed:
-                PlayerLevel._playerStatsData.attackSpeed += data.value;
+                PlayerLevel.Stats.attackSpeed += data.value;
                 break;
         }
     }

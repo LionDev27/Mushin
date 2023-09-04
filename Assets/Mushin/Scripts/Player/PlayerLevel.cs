@@ -2,8 +2,10 @@
 
 public class PlayerLevel : PlayerComponents
 {
-    public PlayerStatsSO _playerStatsData;
+    [HideInInspector]
+    public PlayerStats Stats;
     
+    [SerializeField] private PlayerStatsSO _playerStatsData;
     [Tooltip("Experiencia que necesitará para el primer nivel.")]
     [SerializeField] private int _startingXPNeeded;
     [Tooltip("Cuanta experiencia necesaria para subir de nivel se añade.")]
@@ -13,6 +15,12 @@ public class PlayerLevel : PlayerComponents
     private float _currentXP;
     private float _currentXPNeeded;
     private int _currentLevel;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        Stats = _playerStatsData.Stats;
+    }
 
     private void Start()
     {

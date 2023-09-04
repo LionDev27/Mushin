@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -88,5 +87,17 @@ public abstract class EnemyAgent : MonoBehaviour
     {
         if (other.CompareTag("Player"))
             _playerDamageable = null;
+    }
+
+    private void OnDisable()
+    {
+        if (SpawnController.Instance != null)
+            SpawnController.Instance.RemoveEnemy();
+    }
+
+    private void OnEnable()
+    {
+        if (SpawnController.Instance != null)
+            SpawnController.Instance.AddEnemy();
     }
 }

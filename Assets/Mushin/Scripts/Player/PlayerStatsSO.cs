@@ -1,8 +1,13 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "PlayerStats", menuName = "Data/PlayerStats")]
 public class PlayerStatsSO : ScriptableObject
+{
+    public PlayerStats Stats;
+}
+
+[System.Serializable]
+public struct PlayerStats
 {
     [Header("Stats")]
     public int health;
@@ -18,6 +23,8 @@ public class PlayerStatsSO : ScriptableObject
 
     [Tooltip("Tiempo en segundos que tarda entre ataque y ataque")]
     public float attackSpeed;
+    [Tooltip("Velocidad de ataque que equivale a 1 segundo.")]
+    public float _objectiveSpeed;
 
     [Tooltip("El ataque llega más o menos lejos.")]
     public float attackRange;
@@ -35,10 +42,7 @@ public class PlayerStatsSO : ScriptableObject
 
     [Tooltip("Multiplicador que se aplica a la cantidad de experiencia que da un orbe.")]
     public float xpModifier;
-
-    //Velocidad que equivale a 1 segundo.
-    private float _objectiveSpeed = 5;
-
+    
     public float AttackCooldown()
     {
         float value;
