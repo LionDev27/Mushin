@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyDamageable : Damageable
 {
+    [SerializeField] private Canvas _healthCanvas;
+    [SerializeField] private Image _healthImage;
     private EnemyAgent _agent;
 
     private void Awake()
@@ -12,6 +15,9 @@ public class EnemyDamageable : Damageable
     public override void TakeDamage(float damage)
     {
         base.TakeDamage(damage);
+        if (!_healthCanvas.gameObject.activeInHierarchy)
+            _healthCanvas.gameObject.SetActive(true);
+        _healthImage.fillAmount = _currentHealth / _maxHealth;
         Debug.Log("Taking damage");
     }
 
