@@ -1,7 +1,10 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PlayerAttack : PlayerComponents
 {
+    public static Action OnAttackUpgraded;
     private AttackBase _currentAttack;
     private float _timer;
 
@@ -9,6 +12,16 @@ public class PlayerAttack : PlayerComponents
     {
         base.Awake();
         PlayerInputController.OnAttackPerformed += Attack;
+    }
+
+    private void OnEnable()
+    {
+        OnAttackUpgraded += UpdateStats;
+    }
+
+    private void OnDisable()
+    {
+        OnAttackUpgraded -= UpdateStats;
     }
 
     private void Start()
@@ -26,13 +39,13 @@ public class PlayerAttack : PlayerComponents
     {
         if (!CanAttack()) return;
         SetTimer();
-        _currentAttack._currentDamage = PlayerLevel.Stats.attackDamage;
-        if (IsCritical())
-        {
-            _currentAttack._currentDamage *= PlayerLevel.Stats.criticalDamageMultiplier;
-            Debug.Log("Critical Hit!");
-        }
-        _currentAttack.Attack();
+        
+        Vector2 dir = PlayerInputController.CurrentInput() == InputType.Gamepad && PlayerInputController.IsMoving() &&
+                      !PlayerInputController.IsAiming
+            ? PlayerInputController.MoveUnitaryDir()
+            : PlayerInputController.AimUnitaryDir;
+        
+        _currentAttack.Attack(dir, IsCritical());
     }
 
     private bool IsCritical()
@@ -67,6 +80,12 @@ public class PlayerAttack : PlayerComponents
 
         var currentAttack = Instantiate(attackPrefab, transform);
         _currentAttack = currentAttack.GetComponent<AttackBase>();
-        _currentAttack._playerInput = PlayerInputController;
+        UpdateStats();
+    }
+
+    private void UpdateStats()
+    {
+        PlayerStats stats = PlayerLevel.Stats;
+        _currentAttack.Setup(stats.attackDamage, stats.criticalDamageMultiplier, stats.attackRange, stats.attackReach);
     }
 }

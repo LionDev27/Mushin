@@ -1,21 +1,37 @@
-using System;
 using UnityEngine;
 
 [System.Serializable]
 public abstract class AttackBase : MonoBehaviour
 {
-    [HideInInspector]
-    public PlayerInputs _playerInput;
-    [HideInInspector]
-    public float _currentDamage;
+    protected float _damage;
+    protected float _criticalMultiplier;
+    protected float _range;
+    protected float _reach;
 
-    public abstract void Attack();
+    public abstract void Attack(Vector2 dir, bool isCritical);
+
+    public virtual void Setup(float damage, float criticalMultiplier, float range, float reach)
+    {
+        SetValue(ref _damage, damage);
+        SetValue(ref _criticalMultiplier, criticalMultiplier);
+        SetValue(ref _range, range);
+        SetValue(ref _reach, reach);
+    }
+
+    private void SetValue(ref float oldValue, float newValue)
+    {
+        if (newValue != 0 && newValue != oldValue)
+            oldValue = newValue;
+    }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.TryGetComponent(out Damageable damageable))
-        {
-            damageable.TakeDamage(_currentDamage);
-        }
+            Damage(damageable);
+    }
+
+    protected virtual void Damage(Damageable damageable)
+    {
+        damageable.TakeDamage(_damage);
     }
 }

@@ -25,11 +25,10 @@ public struct PlayerStats
     public float attackSpeed;
     [Tooltip("Velocidad de ataque que equivale a 1 segundo.")]
     public float _objectiveSpeed;
-
     [Tooltip("El ataque llega más o menos lejos.")]
     public float attackRange;
-
-    [Tooltip("El ataque es más grande.")] public float attackReach;
+    [Tooltip("El ataque es más grande.")]
+    public float attackReach;
     public GameObject attackPrefab;
     public float skillDamage;
     public float skillCooldown;

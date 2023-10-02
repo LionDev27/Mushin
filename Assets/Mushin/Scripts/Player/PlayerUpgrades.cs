@@ -24,10 +24,13 @@ public class PlayerUpgrades : PlayerComponents
                 break;
             case Stats.AttackDamage:
                 PlayerLevel.Stats.attackDamage += data.value;
+                PlayerAttack.OnAttackUpgraded?.Invoke();
                 break;
             case Stats.AttackRange:
+                PlayerAttack.OnAttackUpgraded?.Invoke();
                 break;
             case Stats.AttackReach:
+                PlayerAttack.OnAttackUpgraded?.Invoke();
                 break;
             case Stats.AttackSpeed:
                 PlayerLevel.Stats.attackSpeed += data.value;

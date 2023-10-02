@@ -153,5 +153,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerInput: {fileID: 0}
-  _currentDamage: 0
-  _range: 1
+  _distanceToAtttack: {x: 1.2, y: 0, z: 0}

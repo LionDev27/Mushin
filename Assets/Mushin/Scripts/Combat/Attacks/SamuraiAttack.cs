@@ -3,16 +3,24 @@ using UnityEngine;
 
 public class SamuraiAttack : AttackBase
 {
-    [SerializeField] private float _range;
     private Collider2D _collider;
+    private SpriteRenderer _renderer;
 
     private void Awake()
     {
         _collider = GetComponent<Collider2D>();
+        _renderer = GetComponent<SpriteRenderer>();
         _collider.enabled = false;
+        _renderer.enabled = false;
     }
 
-    public override void Attack()
+    public override void Setup(float damage, float criticalMultiplier, float range, float reach)
+    {
+        base.Setup(damage, criticalMultiplier, range, reach);
+        transform.localScale = new Vector3(_range, _reach, 1f);
+    }
+
+    public override void Attack(Vector2 dir, bool isCritical)
     {
         //Si el collider está activado quiere decir que la animacion no ha terminado.
         if (_collider.enabled)
@@ -21,22 +29,26 @@ public class SamuraiAttack : AttackBase
             _collider.enabled = false;
             transform.localPosition = Vector2.zero;
         }
-        
+
         Vector2 newPos = transform.localPosition;
-        Vector2 dir = _playerInput.CurrentInput() == InputType.Gamepad && _playerInput.IsMoving() && !_playerInput.IsAiming
-            ? _playerInput.MoveUnitaryDir()
-            : _playerInput.AimUnitaryDir;
-        
-        newPos += dir * _range * 1.2f;
+
+        Vector3 rotatedVectorToTarget = Quaternion.Euler(0, 0, 90) * dir;
+        Quaternion targetRotation = Quaternion.LookRotation(Vector3.forward, rotatedVectorToTarget);
+        transform.rotation = targetRotation;
+
+        newPos += dir * _range;
         transform.localPosition = newPos;
+
         StartCoroutine(AttackAnimation());
     }
 
     private IEnumerator AttackAnimation()
     {
         _collider.enabled = true;
+        _renderer.enabled = true;
         yield return new WaitForSeconds(0.1f);
         _collider.enabled = false;
+        _renderer.enabled = false;
         transform.localPosition = Vector2.zero;
     }
 }
