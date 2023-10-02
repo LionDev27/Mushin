@@ -1,15 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class EnemyDamageable : Damageable
+public class EnemyDamageable : Damageable, IPoolable
 {
     [SerializeField] private Canvas _healthCanvas;
     [SerializeField] private Image _healthImage;
     private EnemyAgent _agent;
+    private string _poolTag;
 
     private void Awake()
     {
         _agent = GetComponent<EnemyAgent>();
+    }
+
+    private void OnDisable()
+    {
+        _healthCanvas.gameObject.SetActive(false);
+
     }
 
     public override void TakeDamage(float damage)
@@ -45,6 +52,11 @@ public class EnemyDamageable : Damageable
                 break;
             }
         }
-        Destroy(gameObject);
+        ObjectPooler.Instance.ReturnToPool(_poolTag, gameObject);
+    }
+
+    public void SetTag(string poolTag)
+    {
+        _poolTag = poolTag;
     }
 }

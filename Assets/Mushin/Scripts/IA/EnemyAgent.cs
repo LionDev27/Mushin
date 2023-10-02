@@ -28,16 +28,27 @@ public abstract class EnemyAgent : MonoBehaviour
         _damageable = GetComponent<EnemyDamageable>();
         target = FindObjectOfType<PlayerComponents>().transform;
     }
+    
+    private void OnDisable()
+    {
+        if (SpawnController.Instance != null)
+            SpawnController.Instance.RemoveEnemy();
+    }
+
+    private void OnEnable()
+    {
+        if (SpawnController.Instance != null)
+            SpawnController.Instance.AddEnemy();
+        
+        _damageable.SetHealth(stats.health);
+        ChangeState(states[0]);
+    }
 
     protected virtual void Start()
     {
         navMeshAgent.updateRotation = false;
         navMeshAgent.updateUpAxis = false;
         navMeshAgent.speed = stats.speed / 3;
-        
-        _damageable.SetHealth(stats.health);
-        
-        ChangeState(states[0]);
     }
 
     protected virtual void Update()
@@ -87,17 +98,5 @@ public abstract class EnemyAgent : MonoBehaviour
     {
         if (other.CompareTag("Player"))
             _playerDamageable = null;
-    }
-
-    private void OnDisable()
-    {
-        if (SpawnController.Instance != null)
-            SpawnController.Instance.RemoveEnemy();
-    }
-
-    private void OnEnable()
-    {
-        if (SpawnController.Instance != null)
-            SpawnController.Instance.AddEnemy();
     }
 }

@@ -1,14 +1,15 @@
 ﻿using System;
 using UnityEngine;
 
-public class XpOrb : MonoBehaviour
+public class XpOrb : MonoBehaviour, IPoolable
 {
     [SerializeField] private int _xpToAdd;
     [SerializeField] private float _moveSpeed;
     
     private Rigidbody2D _rb;
-    private Transform target;
-    private bool hasTarget;
+    private Transform _target;
+    private bool _hasTarget;
+    private string _poolTag;
     
     public static Action<int> OnXpOrbCollected;
 
@@ -19,9 +20,9 @@ public class XpOrb : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (hasTarget)
+        if (_hasTarget)
         {
-            Vector2 targetDir = target.position - transform.position;
+            Vector2 targetDir = _target.position - transform.position;
             targetDir.Normalize();
             _rb.velocity = targetDir * _moveSpeed * Time.fixedDeltaTime * 100;
         }
@@ -29,13 +30,18 @@ public class XpOrb : MonoBehaviour
 
     public void SetTarget(Transform target)
     {
-        this.target = target;
-        hasTarget = true;
+        _target = target;
+        _hasTarget = true;
     }
     
     public void Collect()
     {
         OnXpOrbCollected?.Invoke(_xpToAdd);
-        ObjectPooler.Instance.ReturnToPool(tag, gameObject);
+        ObjectPooler.Instance.ReturnToPool(_poolTag, gameObject);
+    }
+
+    public void SetTag(string poolTag)
+    {
+        _poolTag = poolTag;
     }
 }

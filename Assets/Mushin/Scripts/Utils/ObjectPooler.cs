@@ -28,10 +28,11 @@ public class ObjectPooler : MonoBehaviour
             {
                 GameObject obj = Instantiate(pool.prefab, pool.container);
                 obj.SetActive(false);
+                obj.GetComponent<IPoolable>().SetTag(pool.poolTag);
                 objectPool.Enqueue(obj);
             }
 
-            poolDictionary.Add(pool.tag, objectPool);
+            poolDictionary.Add(pool.poolTag, objectPool);
         }
     }
 
@@ -45,7 +46,7 @@ public class ObjectPooler : MonoBehaviour
 
         if (poolDictionary[tag].Count == 0)
         {
-            Pool pool = pools.Find(x => x.tag == tag);
+            Pool pool = pools.Find(x => x.poolTag == tag);
             if (pool == null)
             {
                 Debug.LogWarning("Pool with tag " + tag + " doesn't exist");
