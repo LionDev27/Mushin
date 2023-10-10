@@ -4,7 +4,7 @@ using Random = UnityEngine.Random;
 
 public class PlayerAttack : PlayerComponents
 {
-    public static Action OnAttackUpgraded;
+    public static Action<int> OnAttackUpgraded;
     private AttackBase _currentAttack;
     private float _timer;
 
@@ -80,12 +80,11 @@ public class PlayerAttack : PlayerComponents
 
         var currentAttack = Instantiate(attackPrefab, transform);
         _currentAttack = currentAttack.GetComponent<AttackBase>();
-        UpdateStats();
+        UpdateStats(1);
     }
 
-    private void UpdateStats()
+    private void UpdateStats(int penetration = 0)
     {
-        PlayerStats stats = PlayerLevel.Stats;
-        _currentAttack.Setup(stats.attackDamage, stats.criticalDamageMultiplier, stats.attackRange, stats.attackReach);
+        _currentAttack.Setup(PlayerLevel.Stats, penetration);
     }
 }

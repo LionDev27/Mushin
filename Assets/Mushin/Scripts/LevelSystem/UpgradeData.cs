@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "UpgradeData", menuName = "Data/Upgrade")]
 public class UpgradeData : ScriptableObject
 {
-    [Header("Upgrade")]
-    public Stats stat;
+    [FormerlySerializedAs("stat")] [Header("Upgrade")]
+    public Upgrades upgrade;
     public float value;
     
     [Header("Visuals")]

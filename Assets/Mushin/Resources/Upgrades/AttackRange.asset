@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c4083911c72b45dab388398bd87edf8b, type: 3}
-  m_Name: DamageUp
+  m_Name: AttackRange
   m_EditorClassIdentifier: 
-  stat: 4
-  value: 5
-  sprite: {fileID: -1495461733, guid: 91bed6e5bbede1043b6793e08294e2ca, type: 3}
-  title: Proteinas
-  description: "Aumenta en 5 el da\xF1o de ataque."
+  upgrade: 5
+  value: 1
+  sprite: {fileID: -605978159, guid: 91bed6e5bbede1043b6793e08294e2ca, type: 3}
+  title: Test
+  description: Aumenta en 1 el rango de ataque.

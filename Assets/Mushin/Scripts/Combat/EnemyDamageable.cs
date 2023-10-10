@@ -18,6 +18,12 @@ public class EnemyDamageable : Damageable, IPoolable
         _rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
+    private void OnEnable()
+    {
+        _healthCanvas.gameObject.SetActive(false);
+        _rigidbody2D.Sleep();
+    }
+
     private void OnDisable()
     {
         _healthCanvas.gameObject.SetActive(false);

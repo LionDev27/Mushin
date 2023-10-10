@@ -6,33 +6,38 @@ public class PlayerUpgrades : PlayerComponents
 
     private void UpgradeStat(UpgradeData data)
     {
-        switch (data.stat)
+        switch (data.upgrade)
         {
-            case Stats.Health:
+            case Upgrades.Health:
                 PlayerLevel.Stats.health += (int)data.value;
                 HeartsContainer.OnAddHeart?.Invoke();
                 break;
-            case Stats.MoveSpeed:
+            case Upgrades.MoveSpeed:
                 PlayerLevel.Stats.moveSpeed += data.value;
                 break;
-            case Stats.DashAmount:
+            case Upgrades.DashAmount:
                 PlayerLevel.Stats.dashAmount += (int)data.value;
                 PlayerDash.ResetDashes();
                 break;
-            case Stats.DashCooldown:
+            case Upgrades.DashCooldown:
                 PlayerLevel.Stats.dashCooldown += data.value;
                 break;
-            case Stats.AttackDamage:
+            case Upgrades.AttackDamage:
                 PlayerLevel.Stats.attackDamage += data.value;
-                PlayerAttack.OnAttackUpgraded?.Invoke();
+                PlayerAttack.OnAttackUpgraded?.Invoke(0);
                 break;
-            case Stats.AttackRange:
-                PlayerAttack.OnAttackUpgraded?.Invoke();
+            case Upgrades.AttackRange:
+                PlayerLevel.Stats.attackRange += data.value;
+                PlayerAttack.OnAttackUpgraded?.Invoke(0);
                 break;
-            case Stats.AttackReach:
-                PlayerAttack.OnAttackUpgraded?.Invoke();
+            case Upgrades.AttackReach:
+                PlayerLevel.Stats.attackReach += data.value;
+                PlayerAttack.OnAttackUpgraded?.Invoke(0);
                 break;
-            case Stats.AttackSpeed:
+            case Upgrades.AttackPenetration:
+                PlayerAttack.OnAttackUpgraded?.Invoke((int)data.value);
+                break;
+            case Upgrades.AttackSpeed:
                 PlayerLevel.Stats.attackSpeed += data.value;
                 break;
         }

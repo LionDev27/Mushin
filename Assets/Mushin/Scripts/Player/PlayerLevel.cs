@@ -58,7 +58,7 @@ public class PlayerLevel : PlayerComponents
     }
 }
 
-public enum Stats
+public enum Upgrades
 {
     Health,
     MoveSpeed,
@@ -68,4 +68,7 @@ public enum Stats
     AttackRange,
     AttackReach,
     AttackSpeed,
+    AttackPenetration,
+    XpAbsortionRange,
+    EnemyHealthProbability
 }
