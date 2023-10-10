@@ -1,31 +1,44 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class EnemyDamageable : Damageable, IPoolable
 {
     [SerializeField] private Canvas _healthCanvas;
     [SerializeField] private Image _healthImage;
+    [SerializeField] private bool _applyKnockback = true;
+    [SerializeField] private float _knockbackStrength;
     private EnemyAgent _agent;
+    private Rigidbody2D _rigidbody2D;
     private string _poolTag;
 
     private void Awake()
     {
         _agent = GetComponent<EnemyAgent>();
+        _rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     private void OnDisable()
     {
         _healthCanvas.gameObject.SetActive(false);
-
+        _rigidbody2D.Sleep();
     }
 
     public override void TakeDamage(float damage)
     {
+        if (_applyKnockback)
+        {
+            var dir = -_agent.TargetDir();
+            _agent.EnableNavigation(false);
+            _rigidbody2D.WakeUp();
+            _rigidbody2D.AddForce(dir * _knockbackStrength, ForceMode2D.Impulse);
+            StartCoroutine(KnockbackTimer());
+            Debug.Log("Applying Knockback");
+        }
         base.TakeDamage(damage);
         if (!_healthCanvas.gameObject.activeInHierarchy)
             _healthCanvas.gameObject.SetActive(true);
         _healthImage.fillAmount = _currentHealth / _maxHealth;
-        Debug.Log("Taking damage");
     }
 
     protected override void Die()
@@ -53,6 +66,13 @@ public class EnemyDamageable : Damageable, IPoolable
             }
         }
         ObjectPooler.Instance.ReturnToPool(_poolTag, gameObject);
+    }
+
+    private IEnumerator KnockbackTimer()
+    {
+        yield return new WaitForSeconds(0.1f);
+        _rigidbody2D.Sleep();
+        _agent.EnableNavigation(true);
     }
 
     public void SetTag(string poolTag)
