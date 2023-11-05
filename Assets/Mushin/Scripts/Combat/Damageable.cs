@@ -18,5 +18,13 @@ public abstract class Damageable : MonoBehaviour
             Die();
     }
 
-    protected abstract void Die();
+    protected virtual void Die()
+    {
+        DieEffects();
+    }
+
+    protected virtual void DieEffects()
+    {
+        CameraShake.Instance.Shake(5f);
+    }
 }

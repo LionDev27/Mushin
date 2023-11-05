@@ -49,6 +49,7 @@ public class EnemyDamageable : Damageable, IPoolable
 
     protected override void Die()
     {
+        base.Die();
         _agent.EnableNavigation(false);
         SpawnController.Instance.enemiesKilled++;
         var xpAmount = _agent.stats.xpAmount;
