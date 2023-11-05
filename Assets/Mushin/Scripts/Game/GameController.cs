@@ -88,4 +88,10 @@ public class GameController : MonoBehaviour
     }
 
     #endregion
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position, new Vector2(_gameData.xLimit, _gameData.yLimit));
+    }
 }

@@ -26,54 +26,57 @@ public class ObjectPooler : MonoBehaviour
 
             for (int i = 0; i < pool.size; i++)
             {
-                GameObject obj = Instantiate(pool.prefab, pool.container);
-                obj.SetActive(false);
-                obj.GetComponent<IPoolable>().SetTag(pool.poolTag);
-                objectPool.Enqueue(obj);
+                SetObject(pool, objectPool);
             }
 
             poolDictionary.Add(pool.poolTag, objectPool);
         }
     }
 
-    public GameObject SpawnFromPool(string tag, Vector2 position)
+    public GameObject SpawnFromPool(string objTag, Vector2 position)
     {
-        if (!poolDictionary.ContainsKey(tag))
+        if (!poolDictionary.ContainsKey(objTag))
         {
-            Debug.LogWarning("Pool with tag " + tag + " doesn't exist");
+            Debug.LogWarning("Pool with tag " + objTag + " doesn't exist");
             return null;
         }
 
-        if (poolDictionary[tag].Count == 0)
+        if (poolDictionary[objTag].Count == 0)
         {
-            Pool pool = pools.Find(x => x.poolTag == tag);
+            Pool pool = pools.Find(x => x.poolTag == objTag);
             if (pool == null)
             {
-                Debug.LogWarning("Pool with tag " + tag + " doesn't exist");
+                Debug.LogWarning("Pool with tag " + objTag + " doesn't exist");
                 return null;
             }
-            GameObject obj = Instantiate(pool.prefab, pool.container);
-            obj.SetActive(false);
-            poolDictionary[tag].Enqueue(obj);
-            return obj;
+            return SetObject(pool, poolDictionary[objTag]);
         }
 
-        GameObject objectToSpawn = poolDictionary[tag].Dequeue();
+        GameObject objectToSpawn = poolDictionary[objTag].Dequeue();
         objectToSpawn.SetActive(true);
         objectToSpawn.transform.position = position;
 
         return objectToSpawn;
     }
 
-    public void ReturnToPool(string tag, GameObject obj)
+    public void ReturnToPool(string objTag, GameObject obj)
     {
-        if (!poolDictionary.ContainsKey(tag))
+        if (!poolDictionary.ContainsKey(objTag))
         {
-            Debug.LogWarning("Pool with tag " + tag + " doesn't exist");
+            Debug.LogWarning("Pool with tag " + objTag + " doesn't exist");
             return;
         }
 
         obj.SetActive(false);
-        poolDictionary[tag].Enqueue(obj);
+        poolDictionary[objTag].Enqueue(obj);
+    }
+
+    private GameObject SetObject(Pool pool, Queue<GameObject> objectPool)
+    {
+        GameObject obj = Instantiate(pool.prefab, pool.container);
+        obj.SetActive(false);
+        obj.GetComponent<IPoolable>().SetTag(pool.poolTag);
+        objectPool.Enqueue(obj);
+        return obj;
     }
 }
