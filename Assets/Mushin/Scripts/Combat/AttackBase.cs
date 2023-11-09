@@ -21,6 +21,7 @@ public abstract class AttackBase : MonoBehaviour
         SetValue(ref _reach, stats.attackReach);
         if (penetration != 0)
             _penetration += penetration;
+        Debug.Log(_penetration);
     }
 
     private void SetValue(ref float oldValue, float newValue)
@@ -41,7 +42,7 @@ public abstract class AttackBase : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D col)
     {
-        if (!col.TryGetComponent(out Damageable damageable)) return;
+        if (!col.TryGetComponent(out EnemyDamageable damageable)) return;
         if (_colliders.Contains(col))
             _colliders.Remove(col);
     }

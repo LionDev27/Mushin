@@ -5,6 +5,7 @@ using Random = UnityEngine.Random;
 public class PlayerAttack : PlayerComponents
 {
     public static Action<int> OnAttackUpgraded;
+    [SerializeField] private Vector2 _offset;
     private AttackBase _currentAttack;
     private float _timer;
 
@@ -44,7 +45,12 @@ public class PlayerAttack : PlayerComponents
                       !PlayerInputController.IsAiming
             ? PlayerInputController.MoveUnitaryDir()
             : PlayerInputController.AimUnitaryDir;
-        
+
+        Vector2 offset = new Vector2(_offset.x * Mathf.Sign(dir.x), _offset.y * Mathf.Sign(dir.y));
+        if (dir.x != 0)
+            dir.x += offset.x;
+        else
+            dir.y += offset.y;
         _currentAttack.Attack(dir, IsCritical());
     }
 
@@ -86,5 +92,11 @@ public class PlayerAttack : PlayerComponents
     private void UpdateStats(int penetration = 0)
     {
         _currentAttack.Setup(PlayerLevel.Stats, penetration);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireCube(transform.position, Vector2.one + _offset);
     }
 }

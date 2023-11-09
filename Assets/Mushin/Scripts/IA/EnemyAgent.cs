@@ -90,13 +90,13 @@ public abstract class EnemyAgent : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.TryGetComponent(out PlayerDamageable damageable))
+        if (col.TryGetComponent(out PlayerDamageable damageable) && col is BoxCollider2D)
             _playerDamageable = damageable;
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && other is BoxCollider2D)
             _playerDamageable = null;
     }
 }

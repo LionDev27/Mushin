@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerDamageable : Damageable
 {
     [SerializeField] private GameObject _sprite;
+    [SerializeField] private float _extraInvulnerabilityTime;
     private PlayerComponents _playerComponents;
     private float _invulnerabilityTime;
     private float _timer;
@@ -30,7 +31,7 @@ public class PlayerDamageable : Damageable
     public override void TakeDamage(float damage)
     {
         if (!CanTakeDamage()) return;
-        _timer = _invulnerabilityTime;
+        _timer = _invulnerabilityTime + _extraInvulnerabilityTime;
         base.TakeDamage(damage);
         Debug.Log(_currentHealth);
         HeartsContainer.OnEnableHeart?.Invoke(false);
@@ -57,6 +58,11 @@ public class PlayerDamageable : Damageable
         return _timer <= 0;
     }
 
+    private bool InvulnerabilityEnded()
+    {
+        return _timer <= _extraInvulnerabilityTime;
+    }
+
     protected override void Die()
     {
         base.Die();
@@ -65,7 +71,7 @@ public class PlayerDamageable : Damageable
 
     private IEnumerator HitAnimation()
     {
-        while (!CanTakeDamage())
+        while (!InvulnerabilityEnded())
         {
             _sprite.SetActive(false);
             yield return new WaitForSeconds(0.2f);
