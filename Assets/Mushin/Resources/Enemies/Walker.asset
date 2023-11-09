@@ -17,3 +17,5 @@ MonoBehaviour:
   attackDamage: 1
   xpOrbTag: basicXP
   xpAmount: 1
+  healingTag: healing
+  dropHealthProbability: 5

@@ -9,8 +9,7 @@ public class PlayerUpgrades : PlayerComponents
         switch (data.upgrade)
         {
             case Upgrades.Health:
-                PlayerLevel.Stats.health += (int)data.value;
-                HeartsContainer.OnAddHeart?.Invoke();
+                PlayerDamageable.AddLife();
                 break;
             case Upgrades.MoveSpeed:
                 PlayerLevel.Stats.moveSpeed += data.value;

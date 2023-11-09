@@ -23,8 +23,19 @@ public abstract class Damageable : MonoBehaviour
         DieEffects();
     }
 
+    public virtual void Heal(float amount)
+    {
+        if (_currentHealth >= _maxHealth) return;
+        _currentHealth = Mathf.Min(_maxHealth, _currentHealth + amount);
+    }
+
+    public bool CanHeal()
+    {
+        return _currentHealth < _maxHealth;
+    }
+
     protected virtual void DieEffects()
     {
-        CameraShake.Instance.Shake(5f);
+        CameraShake.Instance.Shake(2f);
     }
 }

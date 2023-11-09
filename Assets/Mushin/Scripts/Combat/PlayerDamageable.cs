@@ -30,10 +30,26 @@ public class PlayerDamageable : Damageable
     public override void TakeDamage(float damage)
     {
         if (!CanTakeDamage()) return;
-        base.TakeDamage(damage);
         _timer = _invulnerabilityTime;
+        base.TakeDamage(damage);
+        Debug.Log(_currentHealth);
         HeartsContainer.OnEnableHeart?.Invoke(false);
         StartCoroutine(HitAnimation());
+    }
+
+    public void AddLife()
+    {
+        _maxHealth++;
+        _currentHealth++;
+        Debug.Log(_currentHealth);
+        HeartsContainer.OnAddHeart?.Invoke();
+    }
+
+    public override void Heal(float amount)
+    {
+        base.Heal(amount);
+        Debug.Log(_currentHealth);
+        HeartsContainer.OnEnableHeart?.Invoke(true);
     }
 
     private bool CanTakeDamage()

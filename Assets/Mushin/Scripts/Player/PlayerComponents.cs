@@ -7,6 +7,7 @@ public class PlayerComponents : MonoBehaviour
     public PlayerLevel PlayerLevel { get; private set; }
     public PlayerMovement PlayerMovement { get; private set; }
     public PlayerDash PlayerDash { get; private set; }
+    public PlayerDamageable PlayerDamageable { get; private set; }
 
     public static PlayerComponents Instance;
     
@@ -20,5 +21,6 @@ public class PlayerComponents : MonoBehaviour
         PlayerLevel = GetComponent<PlayerLevel>();
         PlayerMovement = GetComponent<PlayerMovement>();
         PlayerDash = GetComponent<PlayerDash>();
+        PlayerDamageable = GetComponent<PlayerDamageable>();
     }
 }
