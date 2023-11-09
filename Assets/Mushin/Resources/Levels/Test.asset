@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 890214e82bea46908f6e38d3ddf84644, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
-  timeInMinutes: 3
+  timeInMinutes: 10
   spawns:
   - enemyTag: enemyWalker
     minuteToStartSpawning: 0
