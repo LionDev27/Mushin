@@ -8,4 +8,6 @@ public class EnemyStats : ScriptableObject
     public float attackDamage;
     public string xpOrbTag;
     public int xpAmount;
+    [Range(0, 100)]
+    public int dropHealthProbability;
 }
