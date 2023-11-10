@@ -20,8 +20,10 @@ public abstract class AttackBase : MonoBehaviour
         SetValue(ref _range, stats.attackRange);
         SetValue(ref _reach, stats.attackReach);
         if (penetration != 0)
+        {
             _penetration += penetration;
-        Debug.Log(_penetration);
+            Debug.Log($"Penetration: {_penetration}");
+        }
     }
 
     private void SetValue(ref float oldValue, float newValue)

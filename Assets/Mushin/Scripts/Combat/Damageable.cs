@@ -31,6 +31,7 @@ public abstract class Damageable : MonoBehaviour
 
     public bool CanHeal()
     {
+        Debug.Log(_currentHealth);
         return _currentHealth < _maxHealth;
     }
 

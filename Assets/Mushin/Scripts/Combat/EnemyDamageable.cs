@@ -39,7 +39,6 @@ public class EnemyDamageable : Damageable, IPoolable
             _rigidbody2D.WakeUp();
             _rigidbody2D.AddForce(dir * _knockbackStrength, ForceMode2D.Impulse);
             StartCoroutine(KnockbackTimer());
-            Debug.Log("Applying Knockback");
         }
         base.TakeDamage(damage);
         if (!_healthCanvas.gameObject.activeInHierarchy)
