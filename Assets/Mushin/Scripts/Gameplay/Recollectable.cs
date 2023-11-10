@@ -34,12 +34,8 @@ public class Recollectable : MonoBehaviour, IPoolable
 
     public void RemoveTarget()
     {
-        if (_hasTarget) return;
-        Debug.Log("Removing Target");
+        if (!_hasTarget) return;
         _hasTarget = false;
-        Vector2 targetDir = _target.position - transform.position;
-        targetDir.Normalize();
-        _rb.AddForce(-targetDir * 10f, ForceMode2D.Impulse);
         _target = null;
     }
 
@@ -50,6 +46,7 @@ public class Recollectable : MonoBehaviour, IPoolable
 
     public virtual void Collect()
     {
+        RemoveTarget();
         ObjectPooler.Instance.ReturnToPool(_poolTag, gameObject);
     }
 }

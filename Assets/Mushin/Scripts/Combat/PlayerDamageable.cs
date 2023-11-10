@@ -63,7 +63,6 @@ public class PlayerDamageable : Damageable
     protected override void Die()
     {
         base.Die();
-        Debug.Log("Died with " + _currentHealth + " health");
         GameController.OnPlayerDead?.Invoke();
     }
 
