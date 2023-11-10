@@ -15,6 +15,7 @@ public abstract class EnemyAgent : MonoBehaviour
     private EnemyDamageable _damageable;
     private EnemyState _currentState;
     private PlayerDamageable _playerDamageable;
+    private TargetDirFlipper _spriteFlipper;
 
     protected virtual void Awake()
     {
@@ -27,6 +28,7 @@ public abstract class EnemyAgent : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
         _damageable = GetComponent<EnemyDamageable>();
         target = FindObjectOfType<PlayerComponents>().transform;
+        _spriteFlipper = GetComponentInChildren<TargetDirFlipper>();
     }
     
     private void OnDisable()
@@ -46,6 +48,7 @@ public abstract class EnemyAgent : MonoBehaviour
 
     protected virtual void Start()
     {
+        _spriteFlipper.target = target;
         navMeshAgent.updateRotation = false;
         navMeshAgent.updateUpAxis = false;
         navMeshAgent.speed = stats.speed / 3;
@@ -57,6 +60,8 @@ public abstract class EnemyAgent : MonoBehaviour
             _currentState.Execute();
         if (_playerDamageable)
             _playerDamageable.TakeDamage(stats.attackDamage);
+        FlipSprite();
+        
     }
 
     public virtual void ChangeState(EnemyState newState)
@@ -86,6 +91,12 @@ public abstract class EnemyAgent : MonoBehaviour
         Vector2 dir = target.position - transform.position;
         dir.Normalize();
         return dir;
+    }
+
+    private void FlipSprite()
+    {
+        if (_spriteFlipper.CanFlip())
+            _spriteFlipper.Flip();
     }
 
     private void OnTriggerEnter2D(Collider2D col)
