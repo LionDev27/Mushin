@@ -9,7 +9,9 @@ public abstract class AttackBase : MonoBehaviour
     protected float _range;
     protected float _reach;
     protected int _penetration;
-    private List<Collider2D> _colliders = new();
+    protected float _attackCooldown;
+    private int _colliders;
+    private bool _canDamage = true;
 
     public abstract void Attack(Vector2 dir, bool isCritical);
 
@@ -19,6 +21,7 @@ public abstract class AttackBase : MonoBehaviour
         SetValue(ref _criticalMultiplier, stats.criticalDamageMultiplier);
         SetValue(ref _range, stats.attackRange);
         SetValue(ref _reach, stats.attackReach);
+        SetValue(ref _attackCooldown, stats.AttackCooldown());
         if (penetration != 0)
         {
             _penetration += penetration;
@@ -31,26 +34,31 @@ public abstract class AttackBase : MonoBehaviour
         if (newValue != 0 && newValue != oldValue)
             oldValue = newValue;
     }
+    
+    protected virtual void Damage(Damageable damageable)
+    {
+        damageable.TakeDamage(_damage);
+    }
+
+    private void EnableDamage()
+    {
+        _canDamage = true;
+        _colliders = 0;
+    }
 
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.TryGetComponent(out Damageable damageable))
         {
-            if (_colliders.Count >= _penetration) return;
-            _colliders.Add(col);
+            if (!_canDamage) return;
+            _colliders++;
+            if (_colliders >= _penetration)
+            {
+                _canDamage = false;
+                Invoke(nameof(EnableDamage), _attackCooldown);
+            }
+            Debug.Log($"Adding. Colliders: {_colliders}");
             Damage(damageable);
         }
-    }
-
-    private void OnTriggerExit2D(Collider2D col)
-    {
-        if (!col.TryGetComponent(out EnemyDamageable damageable)) return;
-        if (_colliders.Contains(col))
-            _colliders.Remove(col);
-    }
-
-    protected virtual void Damage(Damageable damageable)
-    {
-        damageable.TakeDamage(_damage);
     }
 }
