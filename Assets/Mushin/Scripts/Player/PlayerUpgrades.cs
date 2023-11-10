@@ -33,7 +33,7 @@ public class PlayerUpgrades : PlayerComponents
                 PlayerLevel.Stats.attackReach += data.value;
                 PlayerAttack.OnAttackUpgraded?.Invoke(0);
                 break;
-            case Upgrades.AttackPenetration:
+            case Upgrades.AttackPierce:
                 PlayerAttack.OnAttackUpgraded?.Invoke((int)data.value);
                 break;
             case Upgrades.AttackSpeed:

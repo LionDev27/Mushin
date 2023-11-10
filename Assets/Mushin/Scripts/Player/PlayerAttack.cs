@@ -89,9 +89,9 @@ public class PlayerAttack : PlayerComponents
         UpdateStats(1);
     }
 
-    private void UpdateStats(int penetration = 0)
+    private void UpdateStats(int pierce = 0)
     {
-        _currentAttack.Setup(PlayerLevel.Stats, penetration);
+        _currentAttack.Setup(PlayerLevel.Stats, pierce);
     }
 
     private void OnDrawGizmosSelected()

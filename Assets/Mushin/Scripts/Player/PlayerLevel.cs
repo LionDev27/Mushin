@@ -68,7 +68,7 @@ public enum Upgrades
     AttackRange,
     AttackReach,
     AttackSpeed,
-    AttackPenetration,
+    AttackPierce,
     XpAbsortionRange,
     EnemyHealthProbability
 }

@@ -8,24 +8,24 @@ public abstract class AttackBase : MonoBehaviour
     protected float _criticalMultiplier;
     protected float _range;
     protected float _reach;
-    protected int _penetration;
+    protected int _pierce;
     protected float _attackCooldown;
     private int _colliders;
     private bool _canDamage = true;
 
     public abstract void Attack(Vector2 dir, bool isCritical);
 
-    public virtual void Setup(PlayerStats stats, int penetration)
+    public virtual void Setup(PlayerStats stats, int pierce)
     {
         SetValue(ref _damage, stats.attackDamage);
         SetValue(ref _criticalMultiplier, stats.criticalDamageMultiplier);
         SetValue(ref _range, stats.attackRange);
         SetValue(ref _reach, stats.attackReach);
         SetValue(ref _attackCooldown, stats.AttackCooldown());
-        if (penetration != 0)
+        if (pierce != 0)
         {
-            _penetration += penetration;
-            Debug.Log($"Penetration: {_penetration}");
+            _pierce += pierce;
+            Debug.Log($"Penetration: {_pierce}");
         }
     }
 
@@ -52,7 +52,7 @@ public abstract class AttackBase : MonoBehaviour
         {
             if (!_canDamage) return;
             _colliders++;
-            if (_colliders >= _penetration)
+            if (_colliders >= _pierce)
             {
                 _canDamage = false;
                 Invoke(nameof(EnableDamage), _attackCooldown);

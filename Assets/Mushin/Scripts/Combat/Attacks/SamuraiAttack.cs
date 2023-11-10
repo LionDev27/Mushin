@@ -14,9 +14,9 @@ public class SamuraiAttack : AttackBase
         _renderer.enabled = false;
     }
 
-    public override void Setup(PlayerStats stats, int penetration)
+    public override void Setup(PlayerStats stats, int pierce)
     {
-        base.Setup(stats, penetration);
+        base.Setup(stats, pierce);
         transform.localScale = new Vector3(_range, _reach, 1f);
     }
 
