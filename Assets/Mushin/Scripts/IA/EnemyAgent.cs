@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -16,6 +17,8 @@ public abstract class EnemyAgent : MonoBehaviour
     private EnemyState _currentState;
     private PlayerDamageable _playerDamageable;
     private TargetDirFlipper _spriteFlipper;
+    private float _attackCooldown = 0.5f;
+    private float _timer;
 
     protected virtual void Awake()
     {
@@ -58,10 +61,9 @@ public abstract class EnemyAgent : MonoBehaviour
     {
         if (_currentState)
             _currentState.Execute();
-        if (_playerDamageable)
-            _playerDamageable.TakeDamage(stats.attackDamage);
+        if (_timer > 0)
+            _timer -= Time.deltaTime;
         FlipSprite();
-        
     }
 
     public virtual void ChangeState(EnemyState newState)
@@ -99,15 +101,27 @@ public abstract class EnemyAgent : MonoBehaviour
             _spriteFlipper.Flip();
     }
 
-    private void OnTriggerEnter2D(Collider2D col)
+    private void ResetAttackCooldown()
     {
-        if (col.TryGetComponent(out PlayerDamageable damageable) && col is BoxCollider2D)
-            _playerDamageable = damageable;
+        _timer = _attackCooldown;
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D col)
     {
-        if (other.CompareTag("Player") && other is BoxCollider2D)
-            _playerDamageable = null;
+        Attack(col);
+    }
+
+    private void OnTriggerStay2D(Collider2D col)
+    {
+        Attack(col);
+    }
+
+    private void Attack(Collider2D col)
+    {
+        if (_timer <= 0 && col.TryGetComponent(out PlayerDamageable damageable) && col is BoxCollider2D)
+        {
+            damageable.TakeDamage(stats.attackDamage);
+            ResetAttackCooldown();
+        }
     }
 }

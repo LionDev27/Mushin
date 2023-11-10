@@ -23,10 +23,7 @@ public abstract class AttackBase : MonoBehaviour
         SetValue(ref _reach, stats.attackReach);
         SetValue(ref _attackCooldown, stats.AttackCooldown());
         if (pierce != 0)
-        {
             _pierce += pierce;
-            Debug.Log($"Penetration: {_pierce}");
-        }
     }
 
     private void SetValue(ref float oldValue, float newValue)
@@ -57,7 +54,6 @@ public abstract class AttackBase : MonoBehaviour
                 _canDamage = false;
                 Invoke(nameof(EnableDamage), _attackCooldown);
             }
-            Debug.Log($"Adding. Colliders: {_colliders}");
             Damage(damageable);
         }
     }

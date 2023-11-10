@@ -33,7 +33,6 @@ public class PlayerDamageable : Damageable
         if (!CanTakeDamage()) return;
         _timer = _invulnerabilityTime + _extraInvulnerabilityTime;
         base.TakeDamage(damage);
-        Debug.Log(_currentHealth);
         HeartsContainer.OnEnableHeart?.Invoke(false);
         StartCoroutine(HitAnimation());
     }
@@ -42,14 +41,12 @@ public class PlayerDamageable : Damageable
     {
         _maxHealth++;
         _currentHealth++;
-        Debug.Log(_currentHealth);
         HeartsContainer.OnAddHeart?.Invoke();
     }
 
     public override void Heal(float amount)
     {
         base.Heal(amount);
-        Debug.Log(_currentHealth);
         HeartsContainer.OnEnableHeart?.Invoke(true);
     }
 
@@ -66,6 +63,7 @@ public class PlayerDamageable : Damageable
     protected override void Die()
     {
         base.Die();
+        Debug.Log("Died with " + _currentHealth + " health");
         GameController.OnPlayerDead?.Invoke();
     }
 
