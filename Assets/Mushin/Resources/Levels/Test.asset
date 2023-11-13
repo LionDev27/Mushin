@@ -20,7 +20,7 @@ MonoBehaviour:
     minuteToStartSpawning: 1
   - enemyTag: enemyRanged
     minuteToStartSpawning: 2
-  timeBetweenSpawn: 1
+  timeBetweenSpawn: 1.5
   maxEnemies: 100
   xLimit: 36
   yLimit: 20

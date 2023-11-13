@@ -1,17 +1,27 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TargetDirFlipper : MonoBehaviour
 {
     public Transform target;
 
+    [SerializeField] private SpriteRenderer _otherRenderer;
+    private SpriteRenderer _renderer;
     private float _startingScaleX;
+
+    private void Awake()
+    {
+        _renderer = GetComponent<SpriteRenderer>();
+    }
 
     private void Start()
     {
         _startingScaleX = transform.localScale.x;
+    }
+
+    private void Update()
+    {
+        if (_otherRenderer.sprite != _renderer.sprite)
+            _otherRenderer.sprite = _renderer.sprite;
     }
 
     public void Flip()
@@ -25,6 +35,7 @@ public class TargetDirFlipper : MonoBehaviour
             _ => currentScale.x
         };
         transform.localScale = currentScale;
+        _otherRenderer.transform.localScale = currentScale;
     }
 
     public bool CanFlip()
