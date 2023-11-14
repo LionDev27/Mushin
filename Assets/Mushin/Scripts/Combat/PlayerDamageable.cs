@@ -8,7 +8,8 @@ public class PlayerDamageable : Damageable
     private PlayerComponents _playerComponents;
     private float _invulnerabilityTime;
     private float _timer;
-
+    private bool _isInvulnarable;
+    
     private void Awake()
     {
         _playerComponents = GetComponent<PlayerComponents>();
@@ -30,7 +31,7 @@ public class PlayerDamageable : Damageable
 
     public override void TakeDamage(float damage)
     {
-        if (!CanTakeDamage()) return;
+        if (!CanTakeDamage()||_isInvulnarable) return;
         _timer = _invulnerabilityTime + _extraInvulnerabilityTime;
         base.TakeDamage(damage);
         HeartsContainer.OnEnableHeart?.Invoke(false);
@@ -59,7 +60,16 @@ public class PlayerDamageable : Damageable
     {
         return _timer <= _extraInvulnerabilityTime;
     }
-
+    public void MakePlayerInvulnerableForSeconds(float seconds)
+    {
+        StartCoroutine(InvulnerableCoroutine(seconds));
+    }
+    private IEnumerator InvulnerableCoroutine(float seconds)
+    {
+        _isInvulnarable = true;
+        yield return new WaitForSeconds(seconds);
+        _isInvulnarable = false;
+    }
     protected override void Die()
     {
         base.Die();

@@ -22,5 +22,7 @@ MonoBehaviour:
     minuteToStartSpawning: 2
   timeBetweenSpawn: 1.5
   maxEnemies: 100
-  xLimit: 36
-  yLimit: 20
+  minX: -0.1
+  maxX: 1.1
+  minY: -0.1
+  maxY: 1.1

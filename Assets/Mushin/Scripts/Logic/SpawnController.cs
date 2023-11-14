@@ -12,18 +12,26 @@ public class SpawnController : MonoBehaviour
     private int _maxEnemies;
     private int _currentEnemies;
     private float _timeBetweenSpawn;
-    private float _xLimit, _yLimit;
+
+    private float _minX;
+    private float _maxX;
+    private float _minY;
+    private float _maxY;
     private int _index;
     private bool _spawnersEnabled;
 
     public static SpawnController Instance;
+    private Camera _camera;
 
     private void Awake()
     {
         if (!Instance)
             Instance = this;
     }
-
+    private void Start()
+    {
+        _camera = Camera.main;
+    }
     private void Update()
     {
         if (_currentEnemies >= _maxEnemies && _spawnersEnabled)
@@ -36,8 +44,10 @@ public class SpawnController : MonoBehaviour
     {
         _maxEnemies = data.maxEnemies;
         _timeBetweenSpawn = data.timeBetweenSpawn;
-        _xLimit = data.xLimit;
-        _yLimit = data.yLimit;
+        _minX = data.minX;
+        _maxX = data.maxX;
+        _minY = data.minY;
+        _maxY = data.maxY;
         _spawnersData = data.spawns;
         _index = 0;
         _spawnersEnabled = true;
@@ -69,19 +79,25 @@ public class SpawnController : MonoBehaviour
 
     public Vector2 RandomSpawnPos()
     {
-        var value = Random.Range(0, 2);
-        float xValue, yValue;
-        if (value == 0)
+        int spawnSide = Random.Range(0, 4);
+
+        switch (spawnSide)
         {
-            xValue = RandomSign(_xLimit);
-            yValue = Random.Range(-_yLimit, _yLimit);
+            case 0: // Izquierda del viewport
+                return _camera.ViewportToWorldPoint(new Vector3(_minX, Random.Range(_minY, _maxY)));
+
+            case 1: // Arriba del viewport
+                return _camera.ViewportToWorldPoint(new Vector3(Random.Range(_minX, _maxX), _maxY));
+
+            case 2: // Derecha del viewport
+                return _camera.ViewportToWorldPoint(new Vector3(_maxX, Random.Range(_minY, _maxY)));
+
+            case 3: // Debajo del viewport
+                return _camera.ViewportToWorldPoint(new Vector3(Random.Range(_minX, _maxX), _minY));
+
+            default:
+                return Vector2.zero; // Valor predeterminado, aunque no debería llegar aquí.
         }
-        else
-        {
-            xValue = Random.Range(-_xLimit, _xLimit);
-            yValue = RandomSign(_yLimit);
-        }
-        return new Vector2(xValue, yValue);
     }
 
     public bool CanAddSpawner()

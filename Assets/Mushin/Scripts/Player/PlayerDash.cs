@@ -60,6 +60,7 @@ public class PlayerDash : PlayerComponents
     private void Dash()
     {
         if (IsDashing() || _currentDashAmount <= 0) return;
+        PlayerDamageable.MakePlayerInvulnerableForSeconds(_dashingTime);
         Vector2 moveDir = PlayerInputController.MoveDirection;
         //Si no se está moviendo, hará el dash a la dirección a la que apunta. Si se mueve, lo hará hacia la que se mueve.
         Vector2 dashDir = new Vector2();
