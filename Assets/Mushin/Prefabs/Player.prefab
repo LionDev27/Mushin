@@ -345,6 +345,7 @@ GameObject:
   - component: {fileID: 4093944513358459216}
   - component: {fileID: 4093944513358459219}
   - component: {fileID: 4078609530571793732}
+  - component: {fileID: 864587101}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -562,7 +563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ac4e6a151dd07c46a379e290de366cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _offset: {x: 0.1, y: 0.25}
+  _offset: {x: -0.25, y: 0.25}
 --- !u!114 &4093944513358459219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -589,6 +590,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5cd43a1e8204e79b3415bc44bd0e2ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &864587101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4093944513358459247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd4c050b07f0c1d4e80655c2a51987f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sprite: {fileID: 4093944514426014379}
 --- !u!1 &4093944514281987842
 GameObject:
   m_ObjectHideFlags: 0

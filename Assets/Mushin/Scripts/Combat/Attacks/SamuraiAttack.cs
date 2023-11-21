@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -36,7 +37,12 @@ public class SamuraiAttack : AttackBase
         Quaternion targetRotation = Quaternion.LookRotation(Vector3.forward, rotatedVectorToTarget);
         transform.rotation = targetRotation;
 
-        newPos += dir * _range;
+        var halfRange = _range / 2f;
+        if (dir.x != 0)
+            dir.x += (halfRange * Mathf.Sign(dir.x));
+        else
+            dir.y += (halfRange * Mathf.Sign(dir.y));
+        newPos += dir;
         transform.localPosition = newPos;
 
         StartCoroutine(AttackAnimation());

@@ -152,5 +152,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 558ea9f16d7bbf74091f2a37e042fa52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerInput: {fileID: 0}
-  _distanceToAtttack: {x: 1.2, y: 0, z: 0}
+  _offset: 1

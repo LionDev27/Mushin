@@ -22,8 +22,8 @@ MonoBehaviour:
     attackDamage: 12
     attackSpeed: 5
     _objectiveSpeed: 5
-    attackRange: 1.2
-    attackReach: 2
+    attackRange: 2
+    attackReach: 1.2
     attackPrefab: {fileID: 633339760732158394, guid: f1ff473bc4a8d544db15d4bf4da04a55, type: 3}
     skillDamage: 20
     skillCooldown: 10
