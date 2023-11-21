@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canChange: 0
-  _offset: 0
+  _offset: -1
 --- !u!1 &4364996914991096785
 GameObject:
   m_ObjectHideFlags: 0
