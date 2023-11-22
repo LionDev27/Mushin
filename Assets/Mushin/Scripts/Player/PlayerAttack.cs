@@ -8,6 +8,7 @@ public class PlayerAttack : PlayerComponents
     [SerializeField] private Vector2 _offset;
     private AttackBase _currentAttack;
     private float _timer;
+    private Vector2 _dir;
 
     protected override void Awake()
     {
@@ -34,24 +35,32 @@ public class PlayerAttack : PlayerComponents
     {
         if (!CanAttack())
             RunTimer();
+        else
+        {
+            ChangeAttackDir();
+            _currentAttack.UpdateDir(_dir);
+        }
     }
 
     public void Attack()
     {
         if (!CanAttack()) return;
         SetTimer();
-        
-        Vector2 dir = PlayerInputController.CurrentInput() == InputType.Gamepad && PlayerInputController.IsMoving() &&
+        _currentAttack.Attack(IsCritical());
+    }
+
+    private void ChangeAttackDir()
+    {
+        _dir = PlayerInputController.CurrentInput() == InputType.Gamepad && PlayerInputController.IsMoving() &&
                       !PlayerInputController.IsAiming
             ? PlayerInputController.MoveUnitaryDir()
             : PlayerInputController.AimUnitaryDir;
 
-        Vector2 offset = new Vector2(_offset.x * Mathf.Sign(dir.x), _offset.y * Mathf.Sign(dir.y));
-        if (dir.x != 0)
-            dir.x += offset.x;
+        Vector2 offset = new Vector2(_offset.x * Mathf.Sign(_dir.x), _offset.y * Mathf.Sign(_dir.y));
+        if (_dir.x != 0)
+            _dir.x += offset.x;
         else
-            dir.y += offset.y;
-        _currentAttack.Attack(dir, IsCritical());
+            _dir.y += offset.y;
     }
 
     private bool IsCritical()

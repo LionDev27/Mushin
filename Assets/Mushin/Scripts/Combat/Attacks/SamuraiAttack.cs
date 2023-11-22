@@ -1,17 +1,15 @@
-using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 public class SamuraiAttack : AttackBase
 {
-    private Collider2D _collider;
     private SpriteRenderer _renderer;
+    private float _halfRange => _range / 2f;
 
     private void Awake()
     {
-        _collider = GetComponent<Collider2D>();
         _renderer = GetComponent<SpriteRenderer>();
-        _collider.enabled = false;
         _renderer.enabled = false;
     }
 
@@ -21,39 +19,51 @@ public class SamuraiAttack : AttackBase
         transform.localScale = new Vector3(_range, _reach, 1f);
     }
 
-    public override void Attack(Vector2 dir, bool isCritical)
+    public override void UpdateDir(Vector2 dir)
     {
-        //Si el collider está activado quiere decir que la animacion no ha terminado.
-        if (_collider.enabled)
-        {
-            StopCoroutine(AttackAnimation());
-            _collider.enabled = false;
-            transform.localPosition = Vector2.zero;
-        }
-
-        Vector2 newPos = transform.localPosition;
-
         Vector3 rotatedVectorToTarget = Quaternion.Euler(0, 0, 90) * dir;
         Quaternion targetRotation = Quaternion.LookRotation(Vector3.forward, rotatedVectorToTarget);
         transform.rotation = targetRotation;
 
-        var halfRange = _range / 2f;
         if (dir.x != 0)
-            dir.x += (halfRange * Mathf.Sign(dir.x));
+            dir.x += (_halfRange * Mathf.Sign(dir.x));
         else
-            dir.y += (halfRange * Mathf.Sign(dir.y));
-        newPos += dir;
-        transform.localPosition = newPos;
+            dir.y += (_halfRange * Mathf.Sign(dir.y));
+        transform.localPosition = dir;
+    }
+
+    public override void Attack(bool isCritical)
+    {
+        //Si el renderer está activado quiere decir que la animacion no ha terminado.
+        if (_renderer.enabled)
+        {
+            StopCoroutine(AttackAnimation());
+            _renderer.enabled = false;
+            transform.localPosition = Vector2.zero;
+        }
 
         StartCoroutine(AttackAnimation());
+        var enemies = Physics2D.OverlapBoxAll(transform.position, new Vector2(_range, _reach), 0,
+            LayerMask.GetMask("Enemy"));
+        if (enemies.Length <= 0) return;
+        var orderedEnemies = GetOrderedEnemies(enemies);
+        for (int i = 0; i < _pierce; i++)
+        {
+            Damage(orderedEnemies[i].GetComponent<EnemyDamageable>(), isCritical);
+            if (orderedEnemies.Length == i + 1)
+                break;
+        }
+    }
+
+    private Collider2D[] GetOrderedEnemies(Collider2D[] currentEnemies)
+    {
+        return currentEnemies.OrderBy((d) => (d.transform.position - transform.position).sqrMagnitude).ToArray();
     }
 
     private IEnumerator AttackAnimation()
     {
-        _collider.enabled = true;
         _renderer.enabled = true;
         yield return new WaitForSeconds(0.1f);
-        _collider.enabled = false;
         _renderer.enabled = false;
         transform.localPosition = Vector2.zero;
     }
