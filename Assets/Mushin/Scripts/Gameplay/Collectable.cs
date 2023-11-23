@@ -1,4 +1,5 @@
-﻿using Mushin.Scripts.Player;
+using Mushin.Scripts.Player;
+using System;
 using UnityEngine;
 
 public class Collectable : MonoBehaviour, IPoolable
@@ -13,6 +14,7 @@ public class Collectable : MonoBehaviour, IPoolable
     private Transform _target;
     private bool _hasTarget;
     private string _poolTag;
+    private float _timer;
 
     public void Configure(Player player)
     {
@@ -23,25 +25,31 @@ public class Collectable : MonoBehaviour, IPoolable
         _rb = GetComponent<Rigidbody2D>();
     }
 
+    private void Update()
+    {
+        if (!_hasTarget) return;
+        _timer += Time.deltaTime;
+    }
+
     private void FixedUpdate()
     {
-        if (_hasTarget)
-        {
-            Vector2 targetDir = _target.position - transform.position;
-            targetDir.Normalize();
-            _rb.velocity = targetDir * (_moveSpeed * Time.fixedDeltaTime * 100);
-        }
+        if (!_hasTarget) return;
+        Vector2 targetDir = _target.position - transform.position;
+        targetDir.Normalize();
+        _rb.velocity = targetDir * (_moveSpeed * Time.fixedDeltaTime * 100 * _timer);
     }
 
     public void SetTarget(Transform target)
     {
         _target = target;
+        _timer = 1f;
         _hasTarget = true;
     }
 
     public void RemoveTarget()
     {
         if (!_hasTarget) return;
+        _timer = 0f;
         _hasTarget = false;
         _target = null;
     }

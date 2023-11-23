@@ -270,11 +270,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pools:
   - poolTag: basicXP
-    prefab: {fileID: 8919897314703391152, guid: afe9509f36f6d844cb9bcc7409b1cbf3, type: 3}
+    prefab: {fileID: 6962482134216077356, guid: 6c2e5e18cc5b600459bc3391b2a42092, type: 3}
     container: {fileID: 802390649}
     size: 30
   - poolTag: healing
-    prefab: {fileID: 3931910454129095474, guid: d93e2c29dedb0bb4cabd19ffc6056026, type: 3}
+    prefab: {fileID: 6729499330027724390, guid: 1072de1df6658fa4aa6034fe26797a93, type: 3}
     container: {fileID: 1767600183953219091}
     size: 5
   - poolTag: enemyWalker
