@@ -1,18 +1,32 @@
+using System;
+using Mushin.Scripts.Player;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerDash : PlayerComponents
+[RequireComponent(typeof(Rigidbody2D))]
+public class PlayerDash : MonoBehaviour
 {
+    private Player _player;
     [SerializeField] private Image _dashCooldownImage;
-    [SerializeField] private float _dashingTime;
     private float _dashTimer;
     private float _dashRecoveryTimer;
     private int _currentDashAmount;
+    private Vector2 _moveDir;
+    private PlayerStats _stats;
+    private Rigidbody2D _rb;
 
-    protected override void Awake()
+    public PlayerStats Stats { get => _stats; set => _stats = value; }
+
+    public Vector2 MoveDir { get => _moveDir; set => _moveDir = value; }
+
+    public void Configure(Player player)
     {
-        base.Awake();
-        PlayerInputController.OnDashPerformed += Dash;
+        _player = player;
+    }
+
+    private void Awake()
+    {
+        _rb = GetComponent<Rigidbody2D>();
     }
 
     private void Start()
@@ -24,20 +38,21 @@ public class PlayerDash : PlayerComponents
     {
         if (_dashTimer <= 0)
         {
-            PlayerMovement.EnableMovement(true);
-            //PlayerAttack.canAttack = true;
+            _player.OnIsDashing(false);
         }
         else
-            _dashTimer -= Time.deltaTime;
+        {
+             _dashTimer -= Time.deltaTime;
+        }
 
-        if (_currentDashAmount < PlayerLevel.Stats.dashAmount)
+        if (_currentDashAmount < _stats.dashAmount)
         {
             _dashRecoveryTimer += Time.deltaTime;
-            _dashCooldownImage.fillAmount = _dashRecoveryTimer / PlayerLevel.Stats.dashCooldown;
-            if (_dashRecoveryTimer > PlayerLevel.Stats.dashCooldown)
+            _dashCooldownImage.fillAmount = _dashRecoveryTimer / _stats.dashCooldown;
+            if (_dashRecoveryTimer > _stats.dashCooldown)
             {
                 _currentDashAmount++;
-                if (_currentDashAmount < PlayerLevel.Stats.dashAmount)
+                if (_currentDashAmount < _stats.dashAmount)
                     ResetRecoveryTimer();
             }
         }
@@ -49,48 +64,41 @@ public class PlayerDash : PlayerComponents
 
     public void ResetDashes()
     {
-        _currentDashAmount = PlayerLevel.Stats.dashAmount;
+        _currentDashAmount = _stats.dashAmount;
     }
-    
-    public bool IsDashing()
+
+    public void TryDash(Vector2 defaultDir)
     {
-        return _dashTimer > 0;
-    }
-    
-    private void Dash()
-    {
-        if (IsDashing() || _currentDashAmount <= 0) return;
-        PlayerDamageable.MakePlayerInvulnerableForSeconds(_dashingTime);
-        Vector2 moveDir = PlayerInputController.MoveDirection;
+        if (_dashTimer > 0 || _currentDashAmount <= 0) return;
+        _player.OnIsDashing(true);
         //Si no se está moviendo, hará el dash a la dirección a la que apunta. Si se mueve, lo hará hacia la que se mueve.
-        Vector2 dashDir = new Vector2();
+        Vector2 dashDir;
         float extraForce = 1f;
-        if (moveDir != Vector2.zero)
-            dashDir = moveDir;
+        Debug.Log(_moveDir);
+        if (_moveDir != Vector2.zero)
+            dashDir = _moveDir;
         else
         {
-            dashDir = PlayerInputController.AimDir;
+            dashDir = defaultDir; 
             extraForce = 1.5f;
         }
-        
-        PlayerMovement.EnableMovement(false);
         //PlayerAttack.canAttack = false;
         _currentDashAmount--;
             
         ResetCooldown();
         ResetRecoveryTimer();
         
-        Rigidbody.AddForce(dashDir * PlayerLevel.Stats.dashForce * 100f * extraForce);
+        _rb.AddForce(dashDir * _stats.dashForce * 100f * extraForce);
     }
 
     private void ResetCooldown()
     {
-        _dashTimer = _dashingTime;
+        _dashTimer = _stats.dashingTime;
     }
 
     private void ResetRecoveryTimer()
     {
-        if (_dashRecoveryTimer > PlayerLevel.Stats.dashCooldown)
+        if (_dashRecoveryTimer > _stats.dashCooldown)
             _dashRecoveryTimer = 0;
     }
 }

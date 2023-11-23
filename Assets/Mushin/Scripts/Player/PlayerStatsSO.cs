@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "PlayerStats", menuName = "Data/PlayerStats")]
 public class PlayerStatsSO : ScriptableObject
@@ -17,6 +18,7 @@ public struct PlayerStats
 
     public int dashAmount;
     public float dashCooldown;
+    public float dashingTime;
     public float dashForce;
     public float moveSpeed;
     public float attackDamage;

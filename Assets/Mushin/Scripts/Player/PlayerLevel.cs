@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+﻿using Mushin.Scripts.Player;
+using UnityEngine;
 
-public class PlayerLevel : PlayerComponents
+public class PlayerLevel:MonoBehaviour
 {
+    private Player _player;
     [HideInInspector]
-    public PlayerStats Stats;
     
-    [SerializeField] private PlayerStatsSO _playerStatsData;
     [Tooltip("Experiencia que necesitará para el primer nivel.")]
     [SerializeField] private int _startingXPNeeded;
     [Tooltip("Cuanta experiencia necesaria para subir de nivel se añade.")]
@@ -15,22 +15,20 @@ public class PlayerLevel : PlayerComponents
     private float _currentXP;
     private float _currentXPNeeded;
     private int _currentLevel;
-
-    protected override void Awake()
+    public void Configure(Player player)
     {
-        base.Awake();
-        Stats = _playerStatsData.Stats;
+        _player = player;
     }
-
     private void Start()
     {
         _playerUI = PlayerUI.Instance;
         _currentXP = 0;
         _currentXPNeeded = _startingXPNeeded;
         _currentLevel = 1;
+        
     }
 
-    private void AddXp(int xp)
+    public void AddXp(int xp)
     {
         _currentXP += xp;
         if (_currentXP >= _currentXPNeeded)
@@ -47,28 +45,14 @@ public class PlayerLevel : PlayerComponents
         _playerUI.UpgradeStat();
     }
 
-    private void OnEnable()
-    {
-        XpOrb.OnXpOrbCollected += AddXp;
-    }
-
-    private void OnDisable()
-    {
-        XpOrb.OnXpOrbCollected -= AddXp;
-    }
+    // private void OnEnable()
+    // {
+    //     XpOrbCollectable.OnXpOrbCollected += AddXp;
+    // }
+    //
+    // private void OnDisable()
+    // {
+    //     XpOrbCollectable.OnXpOrbCollected -= AddXp;
+    // }
 }
 
-public enum Upgrades
-{
-    Health,
-    MoveSpeed,
-    DashAmount,
-    DashCooldown,
-    AttackDamage,
-    AttackRange,
-    AttackReach,
-    AttackSpeed,
-    AttackPierce,
-    XpAbsortionRange,
-    EnemyHealthProbability
-}

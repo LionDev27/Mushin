@@ -2,14 +2,13 @@
 
 public class Collector : MonoBehaviour
 {
-    [SerializeField] private PlayerDamageable _damageable;
-
+    public bool playerCanHeal;
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.TryGetComponent(out Recollectable recollectable))
+        if (col.TryGetComponent(out Collectable collectable))
         {
-            if (recollectable is HealRecollectable && !_damageable.CanHeal()) return;
-            recollectable.Collect();
+            if (collectable is HealCollectable && !playerCanHeal) return;
+            collectable.Collect();
         }
     }
 }

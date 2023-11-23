@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using Mushin.Scripts.Player;
 using UnityEngine;
 
 public class ObjectPooler : MonoBehaviour
 {
     public List<Pool> pools;
     public Dictionary<string, Queue<GameObject>> poolDictionary;
-
+    private Player _player;
     public static ObjectPooler Instance;
 
     private void Awake()
@@ -18,6 +19,7 @@ public class ObjectPooler : MonoBehaviour
 
     private void Start()
     {
+        _player = FindObjectOfType<Player>();
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
         foreach (Pool pool in pools)
@@ -74,8 +76,15 @@ public class ObjectPooler : MonoBehaviour
     private GameObject SetObject(Pool pool, Queue<GameObject> objectPool)
     {
         GameObject obj = Instantiate(pool.prefab, pool.container);
+        IPoolable poolObj= obj.GetComponent<IPoolable>();
+        //Inyectar player a los orbes de xp
+        if (poolObj is Collectable)
+        {
+            Collectable collectable = (Collectable)poolObj;
+            collectable.Configure(_player);
+        }
         obj.SetActive(false);
-        obj.GetComponent<IPoolable>().SetTag(pool.poolTag);
+        poolObj.SetTag(pool.poolTag);
         objectPool.Enqueue(obj);
         return obj;
     }

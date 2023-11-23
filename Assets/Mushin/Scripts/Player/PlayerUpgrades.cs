@@ -1,45 +1,76 @@
 ﻿using System;
-
-public class PlayerUpgrades : PlayerComponents
+using Mushin.Scripts.Player;
+using UnityEngine;
+public enum Upgrades
 {
-    public static Action<UpgradeData> OnUpgrade;
+    Health,
+    MoveSpeed,
+    DashAmount,
+    DashCooldown,
+    AttackDamage,
+    AttackRange,
+    AttackReach,
+    AttackSpeed,
+    AttackPierce,
+    XpAbsortionRange,
+    EnemyHealthProbability
+}
+public class PlayerUpgrades : MonoBehaviour
+{
+    private Player _player;
+    [SerializeField] private PlayerStatsSO _playerStatsData;
+    public void Configure(Player player)
+    {
+        _player = player;
+    }
 
+    private void Start()
+    {
+        _player.CurrentStats = _playerStatsData.Stats;
+        _player.OnStatsUpdated();
+    }
+
+    public static Action<UpgradeData> OnUpgrade;
+    
     private void UpgradeStat(UpgradeData data)
     {
+        var playerCurrentStats = _player.CurrentStats;
         switch (data.upgrade)
         {
             case Upgrades.Health:
-                PlayerDamageable.AddLife();
+                //PlayerDamageable.AddLife();
                 break;
             case Upgrades.MoveSpeed:
-                PlayerLevel.Stats.moveSpeed += data.value;
+                playerCurrentStats.moveSpeed += data.value;
                 break;
             case Upgrades.DashAmount:
-                PlayerLevel.Stats.dashAmount += (int)data.value;
-                PlayerDash.ResetDashes();
+                playerCurrentStats.dashAmount = (int)data.value;
+                //PlayerDash.ResetDashes();
                 break;
             case Upgrades.DashCooldown:
-                PlayerLevel.Stats.dashCooldown += data.value;
+                playerCurrentStats.dashCooldown += data.value;
                 break;
             case Upgrades.AttackDamage:
-                PlayerLevel.Stats.attackDamage += data.value;
+                playerCurrentStats.attackDamage += data.value;
                 PlayerAttack.OnAttackUpgraded?.Invoke(0);
                 break;
             case Upgrades.AttackRange:
-                PlayerLevel.Stats.attackRange += data.value;
+                playerCurrentStats.attackRange += data.value;
                 PlayerAttack.OnAttackUpgraded?.Invoke(0);
                 break;
             case Upgrades.AttackReach:
-                PlayerLevel.Stats.attackReach += data.value;
+                playerCurrentStats.attackReach += data.value;
                 PlayerAttack.OnAttackUpgraded?.Invoke(0);
                 break;
             case Upgrades.AttackPierce:
                 PlayerAttack.OnAttackUpgraded?.Invoke((int)data.value);
                 break;
             case Upgrades.AttackSpeed:
-                PlayerLevel.Stats.attackSpeed += data.value;
+                playerCurrentStats.attackSpeed += data.value;
                 break;
         }
+        _player.CurrentStats = playerCurrentStats;
+        _player.OnStatsUpdated();
     }
 
     private void OnEnable()

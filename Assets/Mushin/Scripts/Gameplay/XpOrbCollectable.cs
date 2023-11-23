@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class XpOrb : Recollectable
+public class XpOrbCollectable : Collectable
 {
     [SerializeField] private int _xpToAdd;
     
@@ -9,7 +9,8 @@ public class XpOrb : Recollectable
     
     public override void Collect()
     {
-        OnXpOrbCollected?.Invoke(_xpToAdd);
         base.Collect();
+        player.OnXPOrbCollected(_xpToAdd);
+        // OnXpOrbCollected?.Invoke(_xpToAdd);
     }
 }

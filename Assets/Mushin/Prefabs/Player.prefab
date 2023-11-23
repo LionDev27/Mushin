@@ -124,13 +124,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 707787453}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4093944513358459246}
-  m_RootOrder: 3
+  m_Father: {fileID: 1779339228}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!70 &707787455
 CapsuleCollider2D:
@@ -160,7 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c0ac07f0c13490fb3516d279b329d71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damageable: {fileID: 4093944513358459219}
+  playerCanHeal: 0
 --- !u!1 &1779339227
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,9 +190,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 707787454}
   m_Father: {fileID: 4093944513358459246}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &1779339229
 CircleCollider2D:
@@ -222,7 +223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe77b63dc36877b4ab69c2d085538228, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damageable: {fileID: 4093944513358459219}
+  _collector: {fileID: 707787456}
 --- !u!1 &4093944513265700289
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,7 +369,6 @@ Transform:
   - {fileID: 4093944514426014376}
   - {fileID: 605258879}
   - {fileID: 4093944513265700288}
-  - {fileID: 707787454}
   - {fileID: 1779339228}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -478,26 +478,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb2b7880d6543eda2c889b202fbd3e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Stats:
-    health: 0
-    invulnerabilitySeconds: 0
-    dashAmount: 0
-    dashCooldown: 0
-    dashForce: 0
-    moveSpeed: 0
-    attackDamage: 0
-    attackSpeed: 0
-    _objectiveSpeed: 0
-    attackRange: 0
-    attackReach: 0
-    attackPrefab: {fileID: 0}
-    skillDamage: 0
-    skillCooldown: 0
-    criticalDamageMultiplier: 0
-    criticalChancePercentage: 0
-    collectionRange: 0
-    xpModifier: 0
-  _playerStatsData: {fileID: 11400000, guid: 87c9cb92f18d1d0488386933e7f27195, type: 2}
   _startingXPNeeded: 10
   _xpAdditivePerLevel: 5
 --- !u!114 &4093944513358459217
@@ -513,7 +493,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dashCooldownImage: {fileID: 4093944514281987852}
-  _dashingTime: 0.3
 --- !u!114 &4093944513358459222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -590,6 +569,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5cd43a1e8204e79b3415bc44bd0e2ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerStatsData: {fileID: 0}
 --- !u!114 &864587101
 MonoBehaviour:
   m_ObjectHideFlags: 0

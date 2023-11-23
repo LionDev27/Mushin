@@ -1,24 +1,24 @@
 using System.Collections;
+using Mushin.Scripts.Player;
 using UnityEngine;
 
 public class PlayerDamageable : Damageable
 {
+    private Player _player;
     [SerializeField] private GameObject _sprite;
     [SerializeField] private float _extraInvulnerabilityTime;
-    private PlayerComponents _playerComponents;
     private float _invulnerabilityTime;
     private float _timer;
     private bool _isInvulnarable;
-    
-    private void Awake()
+    public void Configure(Player player)
     {
-        _playerComponents = GetComponent<PlayerComponents>();
+        _player = player;
     }
 
     private void Start()
     {
-        _invulnerabilityTime = _playerComponents.PlayerLevel.Stats.invulnerabilitySeconds;
-        SetHealth(_playerComponents.PlayerLevel.Stats.health);
+        _invulnerabilityTime = _player.CurrentStats.invulnerabilitySeconds;
+        SetHealth(_player.CurrentStats.health);
         for (int i = 0; i < _currentHealth; i++)
             HeartsContainer.OnAddHeart?.Invoke();
     }
@@ -32,9 +32,11 @@ public class PlayerDamageable : Damageable
     public override void TakeDamage(float damage)
     {
         if (!CanTakeDamage()||_isInvulnarable) return;
+        _player.OnTakeDamage(damage);
         _timer = _invulnerabilityTime + _extraInvulnerabilityTime;
         base.TakeDamage(damage);
         HeartsContainer.OnEnableHeart?.Invoke(false);
+        
         StartCoroutine(HitAnimation());
     }
 
@@ -48,6 +50,10 @@ public class PlayerDamageable : Damageable
     public override void Heal(float amount)
     {
         base.Heal(amount);
+        if (_currentHealth >= _maxHealth)
+        {
+            _player.OnMaxHealth();
+        }
         HeartsContainer.OnEnableHeart?.Invoke(true);
     }
 
@@ -81,9 +87,9 @@ public class PlayerDamageable : Damageable
         while (!InvulnerabilityEnded())
         {
             _sprite.SetActive(false);
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.1f);
             _sprite.SetActive(true);
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 }

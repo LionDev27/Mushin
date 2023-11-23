@@ -1,16 +1,23 @@
-﻿using UnityEngine;
+﻿using Mushin.Scripts.Player;
+using UnityEngine;
 
-public class Recollectable : MonoBehaviour, IPoolable
+public class Collectable : MonoBehaviour, IPoolable
 {
     public bool HasTarget => _hasTarget;
     
     [SerializeField] protected float _moveSpeed = 7f;
+    
+    protected Player player;
 
     private Rigidbody2D _rb;
     private Transform _target;
     private bool _hasTarget;
     private string _poolTag;
 
+    public void Configure(Player player)
+    {
+        this.player = player;
+    }
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -22,7 +29,7 @@ public class Recollectable : MonoBehaviour, IPoolable
         {
             Vector2 targetDir = _target.position - transform.position;
             targetDir.Normalize();
-            _rb.velocity = targetDir * _moveSpeed * Time.fixedDeltaTime * 100;
+            _rb.velocity = targetDir * (_moveSpeed * Time.fixedDeltaTime * 100);
         }
     }
 

@@ -1,22 +1,26 @@
 using System;
+using Mushin.Scripts.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInputs : PlayerComponents
+public class PlayerInputs:MonoBehaviour
 {
+    private Player _player;
     public Vector2 MoveDirection { get; private set; }
     public Vector2 AimDir { get; private set; }
     public Vector2 AimUnitaryDir { get; private set; }
-    public Action OnDashPerformed;
-    public Action OnAttackPerformed;
     public bool IsAiming { get; private set; }
 
     private PlayerInput _playerInput;
     private Camera _camera;
 
-    protected override void Awake()
+    public void Configure(Player player)
     {
-        base.Awake();
+        _player = player;
+    }
+
+    protected void Awake()
+    {
         _playerInput = GetComponent<PlayerInput>();
     }
 
@@ -28,11 +32,12 @@ public class PlayerInputs : PlayerComponents
     private void OnMove(InputValue value)
     {
         MoveDirection = value.Get<Vector2>();
+        _player.OnMoveInput(value.Get<Vector2>());
     }
 
     private void OnDash(InputValue value)
     {
-        OnDashPerformed();
+        _player.OnDashInput();
     }
 
     private void OnAimPosition(InputValue value)
@@ -64,6 +69,7 @@ public class PlayerInputs : PlayerComponents
             IsAiming = false;
             return;
         }
+
         IsAiming = true;
         Vector2 unitaryDir = value.Get<Vector2>();
         AimUnitaryDir = Mathf.Abs(unitaryDir.x) > Mathf.Abs(unitaryDir.y)
@@ -73,7 +79,8 @@ public class PlayerInputs : PlayerComponents
 
     private void OnAttack()
     {
-        OnAttackPerformed();
+        Vector2 dir = CurrentInput() == InputType.Gamepad && IsMoving() && !IsAiming ? MoveUnitaryDir() : AimUnitaryDir;
+        _player.OnAttackInput(dir);
     }
 
     public void EnableInputs(bool value)

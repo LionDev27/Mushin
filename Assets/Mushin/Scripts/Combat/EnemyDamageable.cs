@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Mushin.Scripts.Player;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -101,4 +102,6 @@ public class EnemyDamageable : Damageable, IPoolable
     {
         _poolTag = poolTag;
     }
+
+    
 }

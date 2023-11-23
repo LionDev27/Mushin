@@ -17,6 +17,7 @@ MonoBehaviour:
     invulnerabilitySeconds: 1
     dashAmount: 2
     dashCooldown: 7.5
+    dashingTime: 0.3
     dashForce: 5
     moveSpeed: 55
     attackDamage: 12
