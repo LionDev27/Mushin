@@ -11,7 +11,6 @@ public class PlayerAttack : MonoBehaviour
     private AttackBase _currentAttack;
     private float _timer;
     private PlayerStats _stats;
-    private Vector2 _dir;
 
     public bool IsPlayerDashing { get; set; }
     public bool CanAttack=>_currentAttack && _timer <= 0 && !IsPlayerDashing;
@@ -41,28 +40,26 @@ public class PlayerAttack : MonoBehaviour
     {
         if (!CanAttack)
             RunTimer();
-        else
-        {
-            ChangeAttackDir();
-            _currentAttack.UpdateDir(_dir);
-        }
+        
     }
 
-    public void Attack()
+    public void Attack(Vector2 dir)
     {
         if (!CanAttack) return;
         SetTimer();
-        
+        _currentAttack.UpdateDir(ChangeAttackDir(dir));
         _currentAttack.Attack(IsCritical());
     }
 
-    private void ChangeAttackDir()
+    private Vector2 ChangeAttackDir(Vector2 dir)
     {
-        Vector2 offset = new Vector2(_offset.x * Mathf.Sign(_dir.x), _offset.y * Mathf.Sign(_dir.y));
-        if (_dir.x != 0)
-            _dir.x += offset.x;
+        
+        Vector2 offset = new Vector2(_offset.x * Mathf.Sign(dir.x), _offset.y * Mathf.Sign(dir.y));
+        if (dir.x != 0)
+            dir.x += offset.x;
         else
-            _dir.y += offset.y;
+            dir.y += offset.y;
+        return dir;
     }
 
     private bool IsCritical()

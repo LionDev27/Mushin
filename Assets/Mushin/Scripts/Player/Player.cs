@@ -18,6 +18,7 @@ namespace Mushin.Scripts.Player
         public abstract void OnXPOrbCollected(int xpToAdd);
         public abstract void OnTakeDamage(float damage);
         public abstract void OnMaxHealth();
-
+        public abstract void OnShouldAddLife();
+        public abstract void OnDashUpgrade();
     }
 }

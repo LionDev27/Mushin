@@ -22,11 +22,11 @@ public class PlayerUpgrades : MonoBehaviour
     public void Configure(Player player)
     {
         _player = player;
+        _player.CurrentStats = _playerStatsData.Stats;
     }
 
     private void Start()
     {
-        _player.CurrentStats = _playerStatsData.Stats;
         _player.OnStatsUpdated();
     }
 
@@ -38,14 +38,14 @@ public class PlayerUpgrades : MonoBehaviour
         switch (data.upgrade)
         {
             case Upgrades.Health:
-                //PlayerDamageable.AddLife();
+                _player.OnShouldAddLife();
                 break;
             case Upgrades.MoveSpeed:
                 playerCurrentStats.moveSpeed += data.value;
                 break;
             case Upgrades.DashAmount:
                 playerCurrentStats.dashAmount = (int)data.value;
-                //PlayerDash.ResetDashes();
+                _player.OnDashUpgrade();
                 break;
             case Upgrades.DashCooldown:
                 playerCurrentStats.dashCooldown += data.value;

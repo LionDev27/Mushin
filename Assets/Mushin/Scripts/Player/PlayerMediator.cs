@@ -77,4 +77,14 @@ public class PlayerMediator : Player
     {
         _playerMagnet.PlayerCanHeal=false;
     }
+
+    public override void OnShouldAddLife()
+    {
+        _playerDamageable.AddLife();
+    }
+
+    public override void OnDashUpgrade()
+    {
+        _playerDash.ResetDashes();
+    }
 }
