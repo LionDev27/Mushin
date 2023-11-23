@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1572911687338080545, guid: 916b3217d3ed78d488e32822c2e35c75, type: 3}
       propertyPath: m_Name
-      value: Recollectable
+      value: XpRecollectable
       objectReference: {fileID: 0}
     - target: {fileID: 1572911687338080558, guid: 916b3217d3ed78d488e32822c2e35c75, type: 3}
       propertyPath: m_RootOrder
@@ -74,5 +74,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cde8ff955e044c7bb2f0685b3edb0cd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 7
+  _moveSpeed: 5
   _xpToAdd: 1
