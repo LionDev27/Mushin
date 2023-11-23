@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -10,10 +9,8 @@ public abstract class AttackBase : MonoBehaviour
     protected float _reach;
     protected int _pierce;
     protected float _attackCooldown;
-    private int _colliders;
-    private bool _canDamage = true;
 
-    public abstract void Attack(Vector2 dir, bool isCritical);
+    public abstract void Attack(bool isCritical);
 
     public virtual void Setup(PlayerStats stats, int pierce)
     {
@@ -26,35 +23,16 @@ public abstract class AttackBase : MonoBehaviour
             _pierce += pierce;
     }
 
+    public virtual void UpdateDir(Vector2 dir){}
+
     private void SetValue(ref float oldValue, float newValue)
     {
         if (newValue != 0 && newValue != oldValue)
             oldValue = newValue;
     }
     
-    protected virtual void Damage(Damageable damageable)
+    protected virtual void Damage(Damageable damageable, bool critical)
     {
-        damageable.TakeDamage(_damage);
-    }
-
-    private void EnableDamage()
-    {
-        _canDamage = true;
-        _colliders = 0;
-    }
-
-    private void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.TryGetComponent(out Damageable damageable))
-        {
-            if (!_canDamage) return;
-            _colliders++;
-            if (_colliders >= _pierce)
-            {
-                _canDamage = false;
-                Invoke(nameof(EnableDamage), _attackCooldown);
-            }
-            Damage(damageable);
-        }
+        damageable.TakeDamage(critical ? _damage * _criticalMultiplier : _damage);
     }
 }

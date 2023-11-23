@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c4083911c72b45dab388398bd87edf8b, type: 3}
-  m_Name: XpAbsortionRange
+  m_Name: AbsortionRange
   m_EditorClassIdentifier: 
   upgrade: 9
   value: 1
   sprite: {fileID: -1130464498, guid: 91bed6e5bbede1043b6793e08294e2ca, type: 3}
-  title: Pies veloces
-  description: "Aumenta en 1 el rango de absorci\xF3n de XP."
+  title: Magnet Boots
+  description: "Aumenta en 1 el rango de absorci\xF3n."
