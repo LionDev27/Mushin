@@ -5,7 +5,6 @@ public class PlayerLevel:MonoBehaviour
 {
     private Player _player;
     [HideInInspector]
-    
     [Tooltip("Experiencia que necesitará para el primer nivel.")]
     [SerializeField] private int _startingXPNeeded;
     [Tooltip("Cuanta experiencia necesaria para subir de nivel se añade.")]
