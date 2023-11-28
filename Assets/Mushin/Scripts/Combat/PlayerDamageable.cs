@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Mushin.Scripts.Player;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class PlayerDamageable : Damageable
     private float _invulnerabilityTime;
     private float _timer;
     private bool _isInvulnarable;
+
     public void Configure(Player player)
     {
         _player = player;
@@ -79,7 +81,7 @@ public class PlayerDamageable : Damageable
     protected override void Die()
     {
         base.Die();
-        GameController.OnPlayerDead?.Invoke();
+        _player.OnPlayerDead?.Invoke();
     }
 
     private IEnumerator HitAnimation()

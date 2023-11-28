@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Mushin.Scripts.Player
@@ -6,6 +7,11 @@ namespace Mushin.Scripts.Player
     {
         public PlayerStats CurrentStats { get; set; }
 
+        public Action<int> OnDashesUpdated;
+        public Action<int,int> OnXpUpdated;
+        public Action<int> OnLevelUp;
+        public Action<UpgradeData> OnUpgradeApplied;
+        public Action OnPlayerDead;
         //Inputs
         public abstract void OnMoveInput(Vector2 value);
         public abstract void OnAttackInput(Vector2 dir);

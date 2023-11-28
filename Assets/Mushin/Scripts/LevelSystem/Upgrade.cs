@@ -30,6 +30,5 @@ public class Upgrade : MonoBehaviour
     public void UpgradeStat()
     {
         PlayerUpgrades.OnUpgrade?.Invoke(_data);
-        PlayerUI.Instance.UpgradeComplete();
     }
 }

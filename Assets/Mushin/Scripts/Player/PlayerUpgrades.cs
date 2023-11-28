@@ -18,20 +18,22 @@ public enum Upgrades
 public class PlayerUpgrades : MonoBehaviour
 {
     private Player _player;
-    [SerializeField] private PlayerStatsSO _playerStatsData;
+
+    public static Action<UpgradeData> OnUpgrade;
     public void Configure(Player player)
     {
         _player = player;
-        _player.CurrentStats = _playerStatsData.Stats;
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        _player.OnStatsUpdated();
+        OnUpgrade += UpgradeStat;
     }
 
-    public static Action<UpgradeData> OnUpgrade;
-    
+    private void OnDisable()
+    {
+        OnUpgrade -= UpgradeStat;
+    }
     private void UpgradeStat(UpgradeData data)
     {
         var playerCurrentStats = _player.CurrentStats;
@@ -71,15 +73,8 @@ public class PlayerUpgrades : MonoBehaviour
         }
         _player.CurrentStats = playerCurrentStats;
         _player.OnStatsUpdated();
+        _player.OnUpgradeApplied?.Invoke(data);
     }
 
-    private void OnEnable()
-    {
-        OnUpgrade += UpgradeStat;
-    }
-
-    private void OnDisable()
-    {
-        OnUpgrade -= UpgradeStat;
-    }
+    
 }

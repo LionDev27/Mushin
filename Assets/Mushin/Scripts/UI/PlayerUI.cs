@@ -1,46 +1,85 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class PlayerUI : MonoBehaviour
 {
-    [Header("Dashes")] [SerializeField] private TextMeshProUGUI _dashesCountText;
-
-    [Header("XP")] [SerializeField] private Image _xpUIVisuals;
-    [SerializeField] private TextMeshProUGUI _levelText;
+    [SerializeField] private PlayerMediator _player;
+    
+    [Header("Dashes")] 
+    [SerializeField] private RectTransform DashIconsParent;
+    [SerializeField] private CanvasGroup dashImagePrefab;
+    private List<CanvasGroup> dashIcons;
+    
+    [Header("XP")] 
+    [SerializeField] private Image _xpBar;
     [SerializeField] private TextMeshProUGUI _xpText;
+    [SerializeField] private TextMeshProUGUI _levelText;
 
-    [Header("Upgrades")] [SerializeField] private float _upgradesToShow;
+    [Header("Upgrades")]
+    [SerializeField] private float _upgradesToShow;
     [SerializeField] private GameObject _upgradeMenu;
     [SerializeField] private GameObject _upgradeContainer;
     [SerializeField] private GameObject _upgradeButtonPrefab;
 
     private List<GameObject> _upgradeButtons = new();
 
-    public static PlayerUI Instance;
-
     private void Awake()
     {
-        if (!Instance)
+        dashIcons = new();
+        _player.OnDashesUpdated += UpdateDashUI;
+        _player.OnXpUpdated += UpdateXpUI;
+        _player.OnLevelUp += UpdateLevelUI;
+        _player.OnUpgradeApplied += UpgradeComplete;
+    }
+
+    private void OnDestroy()
+    {
+        _player.OnDashesUpdated -= UpdateDashUI;
+        _player.OnXpUpdated -= UpdateXpUI;
+        _player.OnLevelUp -= UpdateLevelUI;
+        _player.OnUpgradeApplied -= UpgradeComplete;
+    }
+
+    private void Start()
+    {
+        ConfigureDashCanvas();
+    }
+
+    private void ConfigureDashCanvas()
+    {
+        int numDashes = _player.CurrentStats.dashAmount;
+        for (int i = 0; i < numDashes; i++)
         {
-            Instance = this;
+            var dashIcon=Instantiate(dashImagePrefab, DashIconsParent);
+            dashIcons.Add(dashIcon);
         }
     }
 
-    public void UpdateDashUI(int dashAmount)
+    private void UpdateDashUI(int dashAmount)
     {
-        _dashesCountText.text = $"Dashes: {dashAmount}";
+        for (int i = 0; i < dashIcons.Count; i++)
+        {
+            dashIcons[i].alpha = i<dashAmount?1:0;
+        }
     }
 
-    public void UpdateLevelUI(int level, float xp, float xpNeeded)
+    private void UpdateXpUI( int xp, int xpNeeded)
     {
-        _xpUIVisuals.fillAmount = xp / xpNeeded;
+        //Debug.Log(xp+ "/" +xpNeeded);
+        _xpBar.fillAmount = (float)xp / xpNeeded;
         _xpText.text = $"{xp} / {xpNeeded}";
-        _levelText.text = $"Level: {level}";
     }
 
-    public void UpgradeStat()
+    private void UpdateLevelUI(int level)
+    {
+        _levelText.text = $"Level: {level}";
+        UpgradeStat();
+    }
+    private void UpgradeStat()
     {
         ShowUpgradeUI(true);
         var allData = Resources.LoadAll<UpgradeData>("Upgrades");
@@ -52,22 +91,27 @@ public class PlayerUI : MonoBehaviour
             do
                 currentData = allData[Random.Range(0, allData.Length)];
             while (currentDataList.Contains(currentData));
-            
+
             GameObject upgradeButton = Instantiate(_upgradeButtonPrefab, _upgradeContainer.transform);
             _upgradeButtons.Add(upgradeButton);
-            
+
             upgradeButton.GetComponent<Upgrade>().SetData(currentData);
             currentDataList.Add(currentData);
         }
     }
 
-    public void UpgradeComplete()
+    private void UpgradeComplete(UpgradeData data)
     {
+        if (data.upgrade == Upgrades.DashAmount)
+        {
+            ConfigureDashCanvas();
+        }
         ShowUpgradeUI(false);
         foreach (var upgradeButton in _upgradeButtons)
         {
             Destroy(upgradeButton);
         }
+
         _upgradeButtons.Clear();
     }
 

@@ -52,19 +52,21 @@ public class PlayerDash : MonoBehaviour
             if (_dashRecoveryTimer > _stats.dashCooldown)
             {
                 _currentDashAmount++;
+                _player.OnDashesUpdated?.Invoke(_currentDashAmount);
                 if (_currentDashAmount < _stats.dashAmount)
                     ResetRecoveryTimer();
             }
         }
         else
+        {
             _dashCooldownImage.fillAmount = 0f;
-
-        PlayerUI.Instance.UpdateDashUI(_currentDashAmount);
+        }
     }
 
     public void ResetDashes()
     {
         _currentDashAmount = _stats.dashAmount;
+        _player.OnDashesUpdated?.Invoke(_currentDashAmount);
     }
 
     public void TryDash(Vector2 defaultDir)
@@ -74,7 +76,6 @@ public class PlayerDash : MonoBehaviour
         //Si no se está moviendo, hará el dash a la dirección a la que apunta. Si se mueve, lo hará hacia la que se mueve.
         Vector2 dashDir;
         float extraForce = 1f;
-        Debug.Log(_moveDir);
         if (_moveDir != Vector2.zero)
             dashDir = _moveDir;
         else
@@ -84,7 +85,7 @@ public class PlayerDash : MonoBehaviour
         }
         //PlayerAttack.canAttack = false;
         _currentDashAmount--;
-            
+        _player.OnDashesUpdated?.Invoke(_currentDashAmount);
         ResetCooldown();
         ResetRecoveryTimer();
         

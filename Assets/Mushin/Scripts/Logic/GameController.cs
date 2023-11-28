@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    public static Action OnPlayerDead;
-    
+    [SerializeField] private PlayerMediator _player;
     [SerializeField] private GameData _gameData;
     [SerializeField] private TextMeshProUGUI _timerText;
     [SerializeField] private GameObject _mainCanvas, _endCanvas;
@@ -18,12 +17,12 @@ public class GameController : MonoBehaviour
 
     private void OnEnable()
     {
-        OnPlayerDead += () => EndGame(false);
+        _player.OnPlayerDead += () => EndGame(false);
     }
 
     private void OnDisable()
     {
-        OnPlayerDead -= () => EndGame(false);
+        _player.OnPlayerDead -= () => EndGame(false);
     }
 
     private void Start()
@@ -40,7 +39,7 @@ public class GameController : MonoBehaviour
     private void StartGame()
     {
         AddSpawnController();
-        SetTimer();
+        ResetTimer();
     }
 
     private void EndGame(bool win)
@@ -69,7 +68,7 @@ public class GameController : MonoBehaviour
 
     #region Timers
 
-    private void SetTimer()
+    private void ResetTimer()
     {
         _timer = 0f;
         _runTimer = true;
@@ -82,7 +81,7 @@ public class GameController : MonoBehaviour
         _minutes = _timer / 60f;
         var minutes = Mathf.FloorToInt(_timer / 60f);
         var seconds = Mathf.FloorToInt(_timer - minutes * 60);
-        _timerText.text = $"{minutes:0}:{seconds:00}";
+        _timerText.text = $"{minutes:00}:{seconds:00}";
         if (minutes >= _gameData.timeInMinutes)
             EndGame(true);
     }

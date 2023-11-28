@@ -9,6 +9,14 @@ public class EnemyDamageable : Damageable, IPoolable
     [SerializeField] private Image _healthImage;
     [SerializeField] private bool _applyKnockback = true;
     [SerializeField] private float _knockbackStrength;
+    [SerializeField] private SpriteRenderer _sprite;
+    
+    [Header("Flash")] [SerializeField] private float _flashTime;
+
+    private static readonly int MainTex = Shader.PropertyToID("_MainTex");
+    private static readonly int FlashAmount = Shader.PropertyToID("_FlashAmount");
+    
+    private MaterialPropertyBlock materialPropertyBlock;
     private EnemyAgent _agent;
     private Rigidbody2D _rigidbody2D;
     private string _poolTag;
@@ -17,6 +25,8 @@ public class EnemyDamageable : Damageable, IPoolable
     {
         _agent = GetComponent<EnemyAgent>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        materialPropertyBlock= new MaterialPropertyBlock();
+        materialPropertyBlock.SetTexture(MainTex,_sprite.sprite.texture);
     }
 
     private void OnEnable()
@@ -41,6 +51,8 @@ public class EnemyDamageable : Damageable, IPoolable
             _rigidbody2D.AddForce(dir * _knockbackStrength, ForceMode2D.Impulse);
             StartCoroutine(KnockbackTimer());
         }
+
+        StartCoroutine(HitAnimation());
         base.TakeDamage(damage);
         if (!_healthCanvas.gameObject.activeInHierarchy)
             _healthCanvas.gameObject.SetActive(true);
@@ -50,6 +62,8 @@ public class EnemyDamageable : Damageable, IPoolable
     protected override void Die()
     {
         base.Die();
+        materialPropertyBlock.SetFloat(FlashAmount, 0);
+        _sprite.SetPropertyBlock(materialPropertyBlock);
         _agent.EnableNavigation(false);
         SpawnController.Instance.enemiesKilled++;
         SpawnXp();
@@ -103,5 +117,17 @@ public class EnemyDamageable : Damageable, IPoolable
         _poolTag = poolTag;
     }
 
-    
+    private IEnumerator HitAnimation()
+    {
+        float elapsedTime = 0;
+        while (elapsedTime < _flashTime)
+        {
+            elapsedTime += Time.deltaTime;
+            var currentFlashAmount = Mathf.Lerp(1, 0, (elapsedTime / _flashTime));
+            materialPropertyBlock.SetFloat(FlashAmount, currentFlashAmount);
+            _sprite.SetPropertyBlock(materialPropertyBlock);
+            yield return null;
+        }
+        
+    }
 }

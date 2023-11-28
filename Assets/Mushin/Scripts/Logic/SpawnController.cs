@@ -4,9 +4,8 @@ using UnityEngine;
 public class SpawnController : MonoBehaviour
 {
     public float NextEnemySpawnerMinute => _spawnersData[_index].minuteToStartSpawning;
-    [HideInInspector]
-    public int enemiesKilled;
-    
+    [HideInInspector] public int enemiesKilled;
+
     private List<EnemySpawn> _spawnersData = new();
     private List<EnemySpawner> _activeSpawners = new();
     private int _maxEnemies;
@@ -28,10 +27,12 @@ public class SpawnController : MonoBehaviour
         if (!Instance)
             Instance = this;
     }
+
     private void Start()
     {
         _camera = Camera.main;
     }
+
     private void Update()
     {
         if (_currentEnemies >= _maxEnemies && _spawnersEnabled)
@@ -79,25 +80,37 @@ public class SpawnController : MonoBehaviour
 
     public Vector2 RandomSpawnPos()
     {
-        int spawnSide = Random.Range(0, 4);
-
-        switch (spawnSide)
+        Vector2 newPosition;
+        do
         {
-            case 0: // Izquierda del viewport
-                return _camera.ViewportToWorldPoint(new Vector3(_minX, Random.Range(_minY, _maxY)));
+            int spawnSide = Random.Range(0, 4);
+            switch (spawnSide)
+            {
+                case 0: // Izquierda del viewport
+                    newPosition = _camera.ViewportToWorldPoint(new Vector3(_minX, Random.Range(_minY, _maxY)));
+                    break;
+                case 1: // Arriba del viewport
+                    newPosition = _camera.ViewportToWorldPoint(new Vector3(Random.Range(_minX, _maxX), _maxY));
+                    break;
+                case 2: // Derecha del viewport
+                    newPosition = _camera.ViewportToWorldPoint(new Vector3(_maxX, Random.Range(_minY, _maxY)));
+                    break;
+                case 3: // Debajo del viewport
+                    newPosition = _camera.ViewportToWorldPoint(new Vector3(Random.Range(_minX, _maxX), _minY));
+                    break;
+                default:
+                    return Vector2.zero; // Valor predeterminado, aunque no debería llegar aquí.
+            }
+        } while (!IsPositionInsideMap(newPosition));
 
-            case 1: // Arriba del viewport
-                return _camera.ViewportToWorldPoint(new Vector3(Random.Range(_minX, _maxX), _maxY));
+        return newPosition;
+    }
 
-            case 2: // Derecha del viewport
-                return _camera.ViewportToWorldPoint(new Vector3(_maxX, Random.Range(_minY, _maxY)));
-
-            case 3: // Debajo del viewport
-                return _camera.ViewportToWorldPoint(new Vector3(Random.Range(_minX, _maxX), _minY));
-
-            default:
-                return Vector2.zero; // Valor predeterminado, aunque no debería llegar aquí.
-        }
+    private bool IsPositionInsideMap(Vector2 position)
+    {
+        var x = position.x;
+        var y = position.y;
+        return x is < 57 and > -57 && y is < 32 and > -32;
     }
 
     public bool CanAddSpawner()

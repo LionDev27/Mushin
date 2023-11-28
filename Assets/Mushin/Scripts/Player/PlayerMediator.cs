@@ -1,8 +1,11 @@
+using System;
 using Mushin.Scripts.Player;
 using UnityEngine;
 
 public class PlayerMediator : Player
 {
+    [SerializeField] private PlayerStatsSO _playerStatsData;
+    
     [SerializeField] private PlayerInputs _playerInputs;
     [SerializeField] private PlayerMovement _playerMovement;
     [SerializeField] private PlayerAttack _playerAttack;
@@ -15,6 +18,8 @@ public class PlayerMediator : Player
 
     private void Awake()
     {
+        CurrentStats = _playerStatsData.Stats;
+        
         _playerInputs.Configure(this);
         _playerMovement.Configure(this);
         _playerAttack.Configure(this);
@@ -24,7 +29,10 @@ public class PlayerMediator : Player
         _playerUpgrades.Configure(this);
         _playerMagnet.Configure(this);
         _playerVisuals.Configure(this);
+        
+        OnStatsUpdated();
     }
+
 
     public override void OnMoveInput(Vector2 value)
     {
