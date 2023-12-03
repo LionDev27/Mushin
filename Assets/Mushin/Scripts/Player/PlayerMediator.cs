@@ -64,6 +64,7 @@ public class PlayerMediator : Player
         _playerMovement.EnableMovement(!dashing);
         if (dashing)
         {
+            _playerVisuals.SpawnDashShadows();
             _playerDamageable.MakePlayerInvulnerableForSeconds(CurrentStats.dashingTime);
         }
     }

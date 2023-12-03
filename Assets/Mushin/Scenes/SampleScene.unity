@@ -1713,7 +1713,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5b70389b22eaff47ae31922143301c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 0}
+  _player: {fileID: 864587113}
   _gameData: {fileID: 11400000, guid: b02f91932439052499bbab862aa998ca, type: 2}
   _timerText: {fileID: 1829004885}
   _mainCanvas: {fileID: 587132176}
@@ -11997,6 +11997,53 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 95024201072022200, guid: 319e703171d4d8f40a893bea68dcbfff, type: 3}
   m_PrefabInstance: {fileID: 1660185889}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1664635687
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1664635688}
+  - component: {fileID: 1664635689}
+  m_Layer: 0
+  m_Name: DashShadowSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1664635688
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1664635687}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.28, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 864587099}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1664635689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1664635687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41b758e9698431a42b93ef6e784a6b93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _shadowPrefab: {fileID: 6755406737384961560, guid: c3e0c7495b0fcfa479df1db5331a7c5b, type: 3}
+  numberOfShadows: 5
+  _secondsBetwwenShadows: 0.05
 --- !u!1001 &1666086488
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15894,6 +15941,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1449912539}
     m_Modifications:
+    - target: {fileID: 864587101, guid: e3e223827706d5d4a80bdf42e2ff8f54, type: 3}
+      propertyPath: _dashShadowSpawner
+      value: 
+      objectReference: {fileID: 1664635689}
     - target: {fileID: 4078609530571793732, guid: e3e223827706d5d4a80bdf42e2ff8f54, type: 3}
       propertyPath: _playerStatsData
       value: 

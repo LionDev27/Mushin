@@ -35,7 +35,7 @@ public class ObjectPooler : MonoBehaviour
         }
     }
 
-    public GameObject SpawnFromPool(string objTag, Vector2 position)
+    public GameObject SpawnFromPool(string objTag, Vector2 position,Quaternion rotation=default)
     {
         if (!poolDictionary.ContainsKey(objTag))
         {
@@ -57,6 +57,7 @@ public class ObjectPooler : MonoBehaviour
         GameObject objectToSpawn = poolDictionary[objTag].Dequeue();
         objectToSpawn.SetActive(true);
         objectToSpawn.transform.position = position;
+        objectToSpawn.transform.rotation = rotation;
 
         return objectToSpawn;
     }

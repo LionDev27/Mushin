@@ -4,12 +4,14 @@ using UnityEngine;
 public class PlayerVisuals : MonoBehaviour
 {
     private Player _player;
+    [SerializeField] private DashShadowSpawner _dashShadowSpawner;
     [SerializeField] private SpriteRenderer _sprite;
     private bool _isFacingLeft;
     private Camera _camera;
     public void Configure(Player player)
     {
         _player = player;
+        _dashShadowSpawner.Configure(_sprite);
     }
     private void Update()
     {
@@ -31,6 +33,8 @@ public class PlayerVisuals : MonoBehaviour
             _isFacingLeft = !_isFacingLeft;
         }
     }
+
+    public void SpawnDashShadows() => _dashShadowSpawner.SpawnShadows();
     
     //Manejar animaciones
 }
