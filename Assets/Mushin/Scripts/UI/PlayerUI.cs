@@ -100,7 +100,7 @@ public class PlayerUI : MonoBehaviour
             GameObject upgradeButton = t.Spawn(_upgradeButtonPrefab);
             _upgradeButtons.Add(upgradeButton);
 
-            upgradeButton.GetComponent<Upgrade>().SetData(currentData);
+            upgradeButton.GetComponent<UpgradeCard>().SetData(currentData);
             upgradeButton.GetComponent<Button>().enabled = false;
             currentDataList.Add(currentData);
             yield return new WaitForSecondsRealtime(0.25f);
