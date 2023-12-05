@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -20,7 +21,7 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _levelText;
 
     [Header("Upgrades")]
-    [SerializeField] private float _upgradesToShow;
+    [SerializeField] private List<UpgradeSpawner> _upgradeSpawners;
     [SerializeField] private GameObject _upgradeMenu;
     [SerializeField] private GameObject _upgradeContainer;
     [SerializeField] private GameObject _upgradeButtonPrefab;
@@ -77,26 +78,29 @@ public class PlayerUI : MonoBehaviour
     private void UpdateLevelUI(int level)
     {
         _levelText.text = $"Level: {level}";
-        UpgradeStat();
+        StartCoroutine(ShowUpgrades());
     }
-    private void UpgradeStat()
+    private IEnumerator ShowUpgrades()
     {
         ShowUpgradeUI(true);
         var allData = Resources.LoadAll<UpgradeData>("Upgrades");
         List<UpgradeData> currentDataList = new();
 
-        for (int i = 0; i < _upgradesToShow; i++)
+        yield return new WaitForSecondsRealtime(0.25f);
+        foreach (var t in _upgradeSpawners)
         {
             UpgradeData currentData;
             do
                 currentData = allData[Random.Range(0, allData.Length)];
             while (currentDataList.Contains(currentData));
 
-            GameObject upgradeButton = Instantiate(_upgradeButtonPrefab, _upgradeContainer.transform);
+            GameObject upgradeButton = t.Spawn(_upgradeButtonPrefab);
             _upgradeButtons.Add(upgradeButton);
 
             upgradeButton.GetComponent<Upgrade>().SetData(currentData);
+            upgradeButton.GetComponent<Button>().enabled = false;
             currentDataList.Add(currentData);
+            yield return new WaitForSecondsRealtime(0.25f);
         }
     }
 
@@ -106,13 +110,21 @@ public class PlayerUI : MonoBehaviour
         {
             ConfigureDashCanvas();
         }
-        ShowUpgradeUI(false);
-        foreach (var upgradeButton in _upgradeButtons)
-        {
-            Destroy(upgradeButton);
-        }
+        StartCoroutine(HideUpgrades());
+    }
 
+    private IEnumerator HideUpgrades()
+    {
+        foreach (var t in _upgradeButtons)
+            t.GetComponent<Button>().enabled = false;
+        yield return new WaitForSecondsRealtime(0.25f);
+        foreach (var t in _upgradeSpawners)
+            t.EndAnimation();
+        yield return new WaitForSecondsRealtime(0.25f);
+        foreach (var t in _upgradeButtons)
+            Destroy(t);
         _upgradeButtons.Clear();
+        ShowUpgradeUI(false);
     }
 
     private void ShowUpgradeUI(bool value)

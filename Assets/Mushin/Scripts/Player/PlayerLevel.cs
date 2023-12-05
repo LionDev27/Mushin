@@ -1,5 +1,8 @@
-﻿using Mushin.Scripts.Player;
+﻿using System;
+using System.Collections;
+using Mushin.Scripts.Player;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerLevel : MonoBehaviour
 {
@@ -11,6 +14,8 @@ public class PlayerLevel : MonoBehaviour
     [Tooltip("Cuanta experiencia necesaria para subir de nivel se añade.")] [SerializeField]
     private int _xpAdditivePerLevel;
 
+    [SerializeField] private float _repelMaxDistance;
+    [SerializeField] private float _levelUpWait;
 
     private int _currentXP;
     private int _currentXPNeeded;
@@ -32,19 +37,45 @@ public class PlayerLevel : MonoBehaviour
     {
         _currentXP += xp;
         if (_currentXP >= _currentXPNeeded)
-        {
-            LevelUp();
-        }
+            StartCoroutine(LevelUp());
 
         _player.OnXpUpdated?.Invoke(_currentXP, _currentXPNeeded);
     }
 
     [ContextMenu("Level Up")]
-    private void LevelUp()
+    private void DebugLevelUp()
+    {
+        StartCoroutine(LevelUp());
+    }
+
+    private IEnumerator LevelUp()
     {
         _currentLevel++;
         _currentXP = 0;
         _currentXPNeeded += _xpAdditivePerLevel;
+        RepelEnemies();
+        yield return new WaitForSeconds(_levelUpWait);
         _player.OnLevelUp?.Invoke(_currentLevel);
+    }
+
+    private void RepelEnemies()
+    {
+        var enemies = Physics2D.OverlapCircleAll(transform.position, _repelMaxDistance, LayerMask.GetMask("Enemy"));
+        if (enemies.Length <= 0) return;
+        foreach (var enemy in enemies)
+        {
+            var enemyPos = enemy.transform.position;
+            Vector2 dir = enemyPos - transform.position;
+            dir.Normalize();
+            var finalPos = new Vector2(transform.position.x + (dir.x * _repelMaxDistance), transform.position.y + (dir.y * _repelMaxDistance)) ;
+            Debug.Log(finalPos);
+            enemy.GetComponent<EnemyDamageable>().Repel(_levelUpWait, finalPos);
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _repelMaxDistance);
     }
 }

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,6 +30,12 @@ public class Upgrade : MonoBehaviour
 
     public void UpgradeStat()
     {
+        PlayAnimation();
         PlayerUpgrades.OnUpgrade?.Invoke(_data);
+    }
+
+    private void PlayAnimation()
+    {
+        transform.DOShakeScale(0.25f, 0.75f).SetUpdate(true).Play();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using DG.Tweening;
 using Mushin.Scripts.Player;
 using UnityEngine;
 using UnityEngine.UI;
@@ -44,14 +45,7 @@ public class EnemyDamageable : Damageable, IPoolable
     public override void TakeDamage(float damage)
     {
         if (_applyKnockback)
-        {
-            var dir = -_agent.TargetDir();
-            _agent.EnableNavigation(false);
-            _rigidbody2D.WakeUp();
-            _rigidbody2D.AddForce(dir * _knockbackStrength, ForceMode2D.Impulse);
-            StartCoroutine(KnockbackTimer());
-        }
-
+            ApplyKnockback(_knockbackStrength);
         StartCoroutine(HitAnimation());
         base.TakeDamage(damage);
         if (!_healthCanvas.gameObject.activeInHierarchy)
@@ -71,6 +65,20 @@ public class EnemyDamageable : Damageable, IPoolable
         ObjectPooler.Instance.ReturnToPool(_poolTag, gameObject);
     }
 
+    private void ApplyKnockback(float strength)
+    {
+        var dir = -_agent.TargetDir();
+        EnableRigidbody(true);
+        _rigidbody2D.AddForce(dir * strength, ForceMode2D.Impulse);
+        StartCoroutine(KnockbackTimer());
+    }
+
+    public void Repel(float time, Vector2 finalPos)
+    {
+        EnableRigidbody(true);
+        transform.DOMove(finalPos, time).SetEase(Ease.OutSine).Play().OnComplete(() => EnableRigidbody(false));
+    }
+
     private void SpawnXp()
     {
         var xpAmount = _agent.stats.xpAmount;
@@ -86,6 +94,15 @@ public class EnemyDamageable : Damageable, IPoolable
                 break;
             }
         }
+    }
+
+    private void EnableRigidbody(bool value)
+    {
+        if (value)
+            _rigidbody2D.WakeUp();
+        else
+            _rigidbody2D.Sleep();
+        _agent.EnableNavigation(!value);
     }
 
     private void SpawnLife()
@@ -108,8 +125,7 @@ public class EnemyDamageable : Damageable, IPoolable
     private IEnumerator KnockbackTimer()
     {
         yield return new WaitForSeconds(0.1f);
-        _rigidbody2D.Sleep();
-        _agent.EnableNavigation(true);
+        EnableRigidbody(false);
     }
 
     public void SetTag(string poolTag)
