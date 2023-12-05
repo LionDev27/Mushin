@@ -16,6 +16,8 @@ public class PlayerLevel : MonoBehaviour
 
     [SerializeField] private float _repelMaxDistance;
     [SerializeField] private float _levelUpWait;
+    [SerializeField] private ParticleSystem _burstParticles;
+    [SerializeField] private ParticleSystem _raysParticles;
 
     private int _currentXP;
     private int _currentXPNeeded;
@@ -54,7 +56,10 @@ public class PlayerLevel : MonoBehaviour
         _currentXP = 0;
         _currentXPNeeded += _xpAdditivePerLevel;
         RepelEnemies();
-        yield return new WaitForSeconds(_levelUpWait);
+        _burstParticles.Play();
+        yield return new WaitForSeconds(_levelUpWait / 2f);
+        _raysParticles.Play();
+        yield return new WaitForSeconds(_levelUpWait / 2f);
         _player.OnLevelUp?.Invoke(_currentLevel);
     }
 
@@ -67,8 +72,7 @@ public class PlayerLevel : MonoBehaviour
             var enemyPos = enemy.transform.position;
             Vector2 dir = enemyPos - transform.position;
             dir.Normalize();
-            var finalPos = new Vector2(transform.position.x + (dir.x * _repelMaxDistance), transform.position.y + (dir.y * _repelMaxDistance)) ;
-            Debug.Log(finalPos);
+            var finalPos = new Vector2(transform.position.x + (dir.x * _repelMaxDistance), transform.position.y + (dir.y * _repelMaxDistance));
             enemy.GetComponent<EnemyDamageable>().Repel(_levelUpWait, finalPos);
         }
     }
