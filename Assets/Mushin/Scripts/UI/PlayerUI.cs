@@ -51,6 +51,9 @@ public class PlayerUI : MonoBehaviour
 
     private void ConfigureDashCanvas()
     {
+        dashIcons.Clear();
+        DashIconsParent.transform.DestroyAllChildren();
+        
         int numDashes = _player.CurrentStats.dashAmount;
         for (int i = 0; i < numDashes; i++)
         {
@@ -82,7 +85,7 @@ public class PlayerUI : MonoBehaviour
     private void UpgradeStat()
     {
         ShowUpgradeUI(true);
-        var allData = Resources.LoadAll<UpgradeData>("Upgrades");
+       var allData = Resources.LoadAll<UpgradeData>("Upgrades");
         List<UpgradeData> currentDataList = new();
 
         for (int i = 0; i < _upgradesToShow; i++)
@@ -91,11 +94,11 @@ public class PlayerUI : MonoBehaviour
             do
                 currentData = allData[Random.Range(0, allData.Length)];
             while (currentDataList.Contains(currentData));
-
+            
             GameObject upgradeButton = Instantiate(_upgradeButtonPrefab, _upgradeContainer.transform);
             _upgradeButtons.Add(upgradeButton);
 
-            upgradeButton.GetComponent<Upgrade>().SetData(currentData);
+            upgradeButton.GetComponent<UpgradeCard>().SetData(currentData);
             currentDataList.Add(currentData);
         }
     }

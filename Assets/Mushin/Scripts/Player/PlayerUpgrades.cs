@@ -46,7 +46,7 @@ public class PlayerUpgrades : MonoBehaviour
                 playerCurrentStats.moveSpeed += data.value;
                 break;
             case Upgrades.DashAmount:
-                playerCurrentStats.dashAmount = (int)data.value;
+                playerCurrentStats.dashAmount += (int)data.value;
                 _player.OnDashUpgrade();
                 break;
             case Upgrades.DashCooldown:
