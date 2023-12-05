@@ -26,5 +26,6 @@ namespace Mushin.Scripts.Player
         public abstract void OnMaxHealth();
         public abstract void OnShouldAddLife();
         public abstract void OnDashUpgrade();
+        public abstract void OnStartLevelingUp(bool value);
     }
 }

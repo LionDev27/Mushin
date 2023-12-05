@@ -55,7 +55,10 @@ public class PlayerLevel : MonoBehaviour
         _currentLevel++;
         _currentXP = 0;
         _currentXPNeeded += _xpAdditivePerLevel;
+        _player.OnStartLevelingUp(false);
         RepelEnemies();
+        var particlesMain = _burstParticles.main;
+        particlesMain.startSpeed = _repelMaxDistance;
         _burstParticles.Play();
         yield return new WaitForSeconds(_levelUpWait / 2f);
         _raysParticles.Play();

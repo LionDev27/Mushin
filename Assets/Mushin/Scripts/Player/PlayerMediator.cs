@@ -57,7 +57,6 @@ public class PlayerMediator : Player
         _playerDash.Stats = CurrentStats;
     }
 
-
     public override void OnIsDashing(bool dashing)
     {
         _playerAttack.IsPlayerDashing = dashing;
@@ -95,5 +94,10 @@ public class PlayerMediator : Player
     public override void OnDashUpgrade()
     {
         _playerDash.ResetDashes();
+    }
+
+    public override void OnStartLevelingUp(bool value)
+    {
+        _playerInputs.EnableInputs(value);
     }
 }
