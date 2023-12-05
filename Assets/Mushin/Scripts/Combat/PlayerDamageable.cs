@@ -8,6 +8,7 @@ public class PlayerDamageable : Damageable
     private Player _player;
     [SerializeField] private GameObject _sprite;
     [SerializeField] private float _extraInvulnerabilityTime;
+    [SerializeField] private Collider2D _triggerCollider;
     private float _invulnerabilityTime;
     private float _timer;
     private bool _isInvulnarable;
@@ -27,14 +28,22 @@ public class PlayerDamageable : Damageable
 
     private void Update()
     {
-        if (!CanTakeDamage())
-            _timer -= Time.deltaTime;
+        if (CanTakeDamage()) return;
+        _timer -= Time.deltaTime;
+        if (CanTakeDamage())
+            EndInvulnerability();
+    }
+
+    private void EndInvulnerability()
+    {
+        _triggerCollider.enabled = true;
     }
 
     public override void TakeDamage(float damage)
     {
         if (!CanTakeDamage()||_isInvulnarable) return;
         _player.OnTakeDamage(damage);
+        _triggerCollider.enabled = false;
         _timer = _invulnerabilityTime + _extraInvulnerabilityTime;
         base.TakeDamage(damage);
         HeartsContainer.OnEnableHeart?.Invoke(false);

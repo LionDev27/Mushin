@@ -10430,6 +10430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sprite: {fileID: 4093944514426014377}
   _extraInvulnerabilityTime: 0.15
+  _triggerCollider: {fileID: 7528079869487348808}
 --- !u!114 &4078609530571793732
 MonoBehaviour:
   m_ObjectHideFlags: 0
