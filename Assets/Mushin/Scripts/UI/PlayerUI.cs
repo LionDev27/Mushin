@@ -52,6 +52,9 @@ public class PlayerUI : MonoBehaviour
 
     private void ConfigureDashCanvas()
     {
+        dashIcons.Clear();
+        DashIconsParent.transform.DestroyAllChildren();
+        
         int numDashes = _player.CurrentStats.dashAmount;
         for (int i = 0; i < numDashes; i++)
         {
