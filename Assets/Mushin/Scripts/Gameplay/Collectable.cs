@@ -52,6 +52,7 @@ public class Collectable : MonoBehaviour, IPoolable
         _timer = 0f;
         _hasTarget = false;
         _target = null;
+        _rb.velocity = Vector2.zero;
     }
 
     public void SetTag(string poolTag)

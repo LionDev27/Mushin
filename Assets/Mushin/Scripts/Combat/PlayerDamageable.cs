@@ -5,13 +5,15 @@ using UnityEngine;
 
 public class PlayerDamageable : Damageable
 {
+    public bool IsInvulnerable{ get => _isInvulnerable; set => _isInvulnerable = value; }
+    
     private Player _player;
     [SerializeField] private GameObject _sprite;
     [SerializeField] private float _extraInvulnerabilityTime;
     [SerializeField] private Collider2D _triggerCollider;
     private float _invulnerabilityTime;
     private float _timer;
-    private bool _isInvulnarable;
+    private bool _isInvulnerable;
 
     public void Configure(Player player)
     {
@@ -41,7 +43,7 @@ public class PlayerDamageable : Damageable
 
     public override void TakeDamage(float damage)
     {
-        if (!CanTakeDamage()||_isInvulnarable) return;
+        if (!CanTakeDamage()||_isInvulnerable) return;
         _player.OnTakeDamage(damage);
         _triggerCollider.enabled = false;
         _timer = _invulnerabilityTime + _extraInvulnerabilityTime;
@@ -83,9 +85,9 @@ public class PlayerDamageable : Damageable
     }
     private IEnumerator InvulnerableCoroutine(float seconds)
     {
-        _isInvulnarable = true;
+        _isInvulnerable = true;
         yield return new WaitForSeconds(seconds);
-        _isInvulnarable = false;
+        _isInvulnerable = false;
     }
     protected override void Die()
     {

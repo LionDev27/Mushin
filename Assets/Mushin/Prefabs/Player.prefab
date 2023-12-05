@@ -51,7 +51,7 @@ ParticleSystem:
   looping: 0
   prewarm: 0
   playOnAwake: 0
-  useUnscaledTime: 0
+  useUnscaledTime: 1
   autoRandomSeed: 1
   startDelay:
     serializedVersion: 2
@@ -5127,7 +5127,7 @@ ParticleSystem:
   looping: 0
   prewarm: 0
   playOnAwake: 0
-  useUnscaledTime: 0
+  useUnscaledTime: 1
   autoRandomSeed: 1
   startDelay:
     serializedVersion: 2
@@ -10350,7 +10350,7 @@ MonoBehaviour:
   _startingXPNeeded: 10
   _xpAdditivePerLevel: 5
   _repelMaxDistance: 8
-  _levelUpWait: 1
+  _levelUpWait: 0.7
   _burstParticles: {fileID: 1040454918}
   _raysParticles: {fileID: 536797943}
 --- !u!114 &4093944513358459217

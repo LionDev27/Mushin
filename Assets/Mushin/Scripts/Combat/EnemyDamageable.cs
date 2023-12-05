@@ -76,7 +76,7 @@ public class EnemyDamageable : Damageable, IPoolable
     public void Repel(float time, Vector2 finalPos)
     {
         EnableRigidbody(true);
-        transform.DOMove(finalPos, time).SetEase(Ease.OutSine).Play().OnComplete(() => EnableRigidbody(false));
+        transform.DOMove(finalPos, time).SetEase(Ease.OutSine).SetUpdate(true).Play().OnComplete(() => EnableRigidbody(false));
     }
 
     private void SpawnXp()

@@ -55,6 +55,8 @@ public class PlayerMediator : Player
         _playerMovement.MoveSpeed = CurrentStats.moveSpeed;
         _playerAttack.Stats = CurrentStats;
         _playerDash.Stats = CurrentStats;
+        _playerDamageable.IsInvulnerable = false;
+        Time.timeScale = 1;
     }
 
     public override void OnIsDashing(bool dashing)
@@ -96,8 +98,10 @@ public class PlayerMediator : Player
         _playerDash.ResetDashes();
     }
 
-    public override void OnStartLevelingUp(bool value)
+    public override void OnStartLevelingUp()
     {
-        _playerInputs.EnableInputs(value);
+        _playerInputs.EnableInputs(false);
+        _playerDamageable.IsInvulnerable = true;
+        Time.timeScale = 0;
     }
 }

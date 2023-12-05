@@ -134,6 +134,5 @@ public class PlayerUI : MonoBehaviour
     {
         _upgradeMenu.SetActive(value);
         PlayerComponents.Instance.PlayerInputController.EnableInputs(!value);
-        Time.timeScale = value ? 0 : 1;
     }
 }
