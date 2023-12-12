@@ -7,7 +7,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private PlayerMediator _player;
     [SerializeField] private GameData _gameData;
     [SerializeField] private TextMeshProUGUI _timerText;
-    [SerializeField] private GameObject _mainCanvas, _endCanvas;
+    [SerializeField] private GameObject _mainCanvas, _endCanvas, _pauseCanvas;
     [SerializeField] private TextMeshProUGUI _endTitle, _timeSurvived, _enemiesKilled;
     
     private SpawnController _spawnController;
@@ -34,12 +34,15 @@ public class GameController : MonoBehaviour
     {
         RunTimer();
         CheckSpawners();
+        if (Input.GetKeyDown(KeyCode.Escape))
+            TogglePause();
     }
 
     private void StartGame()
     {
         AddSpawnController();
         ResetTimer();
+        SetupCanvas();
     }
 
     private void EndGame(bool win)
@@ -52,11 +55,24 @@ public class GameController : MonoBehaviour
         Time.timeScale = 0f;
     }
 
+    public void TogglePause()
+    {
+        _pauseCanvas.SetActive(!_pauseCanvas.activeInHierarchy);
+        Time.timeScale = Time.timeScale == 0f ? 1f : 0f;
+    }
+
     private void AddSpawnController()
     {
         _spawnController = new GameObject("SpawnController").AddComponent<SpawnController>();
         _spawnController.transform.parent = transform;
         _spawnController.Init(_gameData);
+    }
+    
+    private void SetupCanvas()
+    {
+        _mainCanvas.SetActive(true);
+        _endCanvas.SetActive(false);
+        _pauseCanvas.SetActive(false);
     }
 
     private void CheckSpawners()
