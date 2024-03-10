@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SpawnController : MonoBehaviour
 {
@@ -7,20 +9,18 @@ public class SpawnController : MonoBehaviour
     [HideInInspector] public int enemiesKilled;
 
     private List<EnemySpawn> _spawnersData = new();
-    private List<EnemySpawner> _activeSpawners = new();
+    private List<string> _activeSpawners = new();
     private int _maxEnemies;
     private int _currentEnemies;
     private float _timeBetweenSpawn;
+    private float _timer;
 
-    private float _minX;
-    private float _maxX;
-    private float _minY;
-    private float _maxY;
+    private float _xLimit;
+    private float _yLimit;
     private int _index;
     private bool _spawnersEnabled;
 
     public static SpawnController Instance;
-    private Camera _camera;
 
     private void Awake()
     {
@@ -30,10 +30,47 @@ public class SpawnController : MonoBehaviour
 
     private void Start()
     {
-        _camera = Camera.main;
+        ResetTimer();
     }
 
     private void Update()
+    {
+        CheckMaxEnemies();
+        if (_spawnersEnabled && _timer > 0f)
+        {
+            Debug.Log("Spawner timer: " + _timer);
+            _timer -= Time.deltaTime;
+            if (_timer <= 0f)
+                Spawn();
+        }
+    }
+    
+    public void Init(GameData data)
+    {
+        _maxEnemies = data.maxEnemies;
+        _timeBetweenSpawn = data.timeBetweenSpawn;
+        _spawnersData = data.spawns;
+        _xLimit = data.levelLimit.x;
+        _yLimit = data.levelLimit.y;
+        _index = 0;
+        _spawnersEnabled = true;
+    }
+
+    public void AddSpawner()
+    {
+        Debug.Log("Adding spawner");
+        var currentTag = _spawnersData[_index].enemyTag;
+        _activeSpawners.Add(currentTag);
+        if (CanAddSpawner())
+            _index++;
+    }
+
+    private void ResetTimer()
+    {
+        _timer = _timeBetweenSpawn;
+    }
+    
+    private void CheckMaxEnemies()
     {
         if (_currentEnemies >= _maxEnemies && _spawnersEnabled)
             EnableSpawners(false);
@@ -41,32 +78,22 @@ public class SpawnController : MonoBehaviour
             EnableSpawners(true);
     }
 
-    public void Init(GameData data)
+    private string GetRandomEnemyTag()
     {
-        _maxEnemies = data.maxEnemies;
-        _timeBetweenSpawn = data.timeBetweenSpawn;
-        _minX = data.minX;
-        _maxX = data.maxX;
-        _minY = data.minY;
-        _maxY = data.maxY;
-        _spawnersData = data.spawns;
-        _index = 0;
-        _spawnersEnabled = true;
+        var randomIndex = Random.Range(0, _activeSpawners.Count);
+        var randomTag = _activeSpawners[randomIndex];
+        return randomTag;
     }
 
-    public void AddSpawner()
+    private void Spawn()
     {
-        var currentTag = _spawnersData[_index].enemyTag;
-        EnemySpawner newSpawner = new GameObject($"{currentTag}Spawner").AddComponent<EnemySpawner>();
-        newSpawner.transform.parent = transform;
-        newSpawner.Init(this, currentTag, _timeBetweenSpawn);
-        _activeSpawners.Add(newSpawner);
-        newSpawner.EnableSpawn(true);
-        if (CanAddSpawner())
-            _index++;
+        Debug.Log("Spawning enemy");
+        ObjectPooler.Instance.SpawnFromPool(GetRandomEnemyTag(), RandomSpawnPos());
+        AddEnemy();
+        ResetTimer();
     }
 
-    public void AddEnemy()
+    private void AddEnemy()
     {
         _currentEnemies++;
         if (_currentEnemies >= _maxEnemies)
@@ -78,57 +105,56 @@ public class SpawnController : MonoBehaviour
         _currentEnemies--;
     }
 
-    public Vector2 RandomSpawnPos()
+    private Vector2 RandomSpawnPos()
     {
-        Vector2 newPosition;
-        do
-        {
-            int spawnSide = Random.Range(0, 4);
-            switch (spawnSide)
-            {
-                case 0: // Izquierda del viewport
-                    newPosition = _camera.ViewportToWorldPoint(new Vector3(_minX, Random.Range(_minY, _maxY)));
-                    break;
-                case 1: // Arriba del viewport
-                    newPosition = _camera.ViewportToWorldPoint(new Vector3(Random.Range(_minX, _maxX), _maxY));
-                    break;
-                case 2: // Derecha del viewport
-                    newPosition = _camera.ViewportToWorldPoint(new Vector3(_maxX, Random.Range(_minY, _maxY)));
-                    break;
-                case 3: // Debajo del viewport
-                    newPosition = _camera.ViewportToWorldPoint(new Vector3(Random.Range(_minX, _maxX), _minY));
-                    break;
-                default:
-                    return Vector2.zero; // Valor predeterminado, aunque no debería llegar aquí.
-            }
-        } while (!IsPositionInsideMap(newPosition));
-
-        return newPosition;
+        var x = Random.Range(-_xLimit, _xLimit);
+        var y = Random.Range(-_yLimit, _yLimit);
+        return new Vector2(x, y);
     }
-
-    private bool IsPositionInsideMap(Vector2 position)
-    {
-        var x = position.x;
-        var y = position.y;
-        return x is < 57 and > -57 && y is < 32 and > -32;
-    }
-
+    
     public bool CanAddSpawner()
     {
         return _index < _spawnersData.Count;
-    }
-
-    private float RandomSign(float limit)
-    {
-        var sign = Random.Range(0, 2);
-        return sign == 0 ? limit : -limit;
     }
 
     private void EnableSpawners(bool value)
     {
         Debug.Log("Enabling spawners");
         _spawnersEnabled = value;
-        foreach (var spawner in _activeSpawners)
-            spawner.EnableSpawn(value);
     }
+    
+    // OLD SPAWNERS BEHAVIOR
+    // public Vector2 RandomSpawnPos()
+    // {
+    //     Vector2 newPosition;
+    //     do
+    //     {
+    //         int spawnSide = Random.Range(0, 4);
+    //         switch (spawnSide)
+    //         {
+    //             case 0: // Izquierda del viewport
+    //                 newPosition = _camera.ViewportToWorldPoint(new Vector3(_minX, Random.Range(_minY, _maxY)));
+    //                 break;
+    //             case 1: // Arriba del viewport
+    //                 newPosition = _camera.ViewportToWorldPoint(new Vector3(Random.Range(_minX, _maxX), _maxY));
+    //                 break;
+    //             case 2: // Derecha del viewport
+    //                 newPosition = _camera.ViewportToWorldPoint(new Vector3(_maxX, Random.Range(_minY, _maxY)));
+    //                 break;
+    //             case 3: // Debajo del viewport
+    //                 newPosition = _camera.ViewportToWorldPoint(new Vector3(Random.Range(_minX, _maxX), _minY));
+    //                 break;
+    //             default:
+    //                 return Vector2.zero; // Valor predeterminado, aunque no debería llegar aquí.
+    //         }
+    //     } while (!IsPositionInsideMap(newPosition));
+    //
+    //     return newPosition;
+    // }
+    // private bool IsPositionInsideMap(Vector2 position)
+    // {
+    //     var x = position.x;
+    //     var y = position.y;
+    //     return x is < 57 and > -57 && y is < 32 and > -32;
+    // }
 }

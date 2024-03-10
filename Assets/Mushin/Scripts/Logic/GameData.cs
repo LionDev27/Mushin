@@ -11,6 +11,6 @@ public class GameData : ScriptableObject
     public float timeBetweenSpawn;
     [Tooltip("Maximo de enemigos que puede haber en pantalla.")]
     public int maxEnemies;
-    [Tooltip("Distancia del viewport a la que spawnean los enemigos (en unidades de viewport)")]
-    public float minX,maxX,minY,maxY;
+    [Tooltip("Límites del nivel")]
+    public Vector2 levelLimit;
 }

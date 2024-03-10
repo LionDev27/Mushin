@@ -42,9 +42,6 @@ public abstract class EnemyAgent : MonoBehaviour
 
     private void OnEnable()
     {
-        if (SpawnController.Instance != null)
-            SpawnController.Instance.AddEnemy();
-        
         _damageable.SetHealth(stats.health);
         ChangeState(states[0]);
     }
