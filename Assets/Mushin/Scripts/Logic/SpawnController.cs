@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -7,6 +8,8 @@ public class SpawnController : MonoBehaviour
 {
     public float NextEnemySpawnerMinute => _spawnersData[_index].minuteToStartSpawning;
     [HideInInspector] public int enemiesKilled;
+    
+    private const string SPAWN_PARTICLES_TAG = "spawnParticles";
 
     private List<EnemySpawn> _spawnersData = new();
     private List<string> _activeSpawners = new();
@@ -41,7 +44,7 @@ public class SpawnController : MonoBehaviour
         {
             _timer -= Time.deltaTime;
             if (_timer <= 0f)
-                Spawn();
+                StartCoroutine(Spawn());
         }
     }
 
@@ -85,11 +88,14 @@ public class SpawnController : MonoBehaviour
         return randomTag;
     }
 
-    private void Spawn()
+    private IEnumerator Spawn()
     {
-        ObjectPooler.Instance.SpawnFromPool(GetRandomEnemyTag(), RandomSpawnPos());
-        AddEnemy();
         ResetTimer();
+        var pos = RandomSpawnPos();
+        ObjectPooler.Instance.SpawnFromPool(SPAWN_PARTICLES_TAG, pos);
+        yield return new WaitForSeconds(1f);
+        ObjectPooler.Instance.SpawnFromPool(GetRandomEnemyTag(), pos);
+        AddEnemy();
     }
 
     private void AddEnemy()

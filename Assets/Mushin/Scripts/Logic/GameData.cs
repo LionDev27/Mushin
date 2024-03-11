@@ -7,6 +7,7 @@ public class GameData : ScriptableObject
     [Tooltip("Tiempo de partida en minutos.")]
     public float timeInMinutes;
     public List<EnemySpawn> spawns;
+    public GameObject spawnParticlesPrefab;
     [Tooltip("Tiempo que tarda un enemigo en spawnear.")]
     public float timeBetweenSpawn;
     [Tooltip("Maximo de enemigos que puede haber en pantalla.")]

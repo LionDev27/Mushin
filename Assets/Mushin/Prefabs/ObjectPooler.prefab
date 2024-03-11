@@ -187,6 +187,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2082970051}
+  - {fileID: 8245339378656662700}
   m_Father: {fileID: 8039000415745395696}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -285,6 +286,37 @@ Transform:
   m_Father: {fileID: 1733279243}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8026586747862891470
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8245339378656662700}
+  m_Layer: 0
+  m_Name: SpawnParticles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8245339378656662700
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8026586747862891470}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1387271781}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8039000415745395703
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,4 +388,8 @@ MonoBehaviour:
   - poolTag: dashShadow
     prefab: {fileID: 6755406737384961560, guid: c3e0c7495b0fcfa479df1db5331a7c5b, type: 3}
     container: {fileID: 2082970051}
+    size: 10
+  - poolTag: spawnParticles
+    prefab: {fileID: 3510726748297534498, guid: dc36dddaf8c31cc45a30789dfda8d249, type: 3}
+    container: {fileID: 8245339378656662700}
     size: 10

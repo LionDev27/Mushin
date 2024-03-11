@@ -78,12 +78,20 @@ public class ObjectPooler : MonoBehaviour
     {
         GameObject obj = Instantiate(pool.prefab, pool.container);
         IPoolable poolObj= obj.GetComponent<IPoolable>();
-        //Inyectar player a los orbes de xp
-        if (poolObj is Collectable)
+        switch (poolObj)
         {
-            Collectable collectable = (Collectable)poolObj;
-            collectable.Configure(_player);
+            case null:
+                Debug.LogWarning("Object with tag " + pool.poolTag + " doesn't implement IPoolable");
+                return null;
+            //Inyectar player a los orbes de xp
+            case Collectable obj1:
+            {
+                Collectable collectable = obj1;
+                collectable.Configure(_player);
+                break;
+            }
         }
+
         obj.SetActive(false);
         poolObj.SetTag(pool.poolTag);
         objectPool.Enqueue(obj);
