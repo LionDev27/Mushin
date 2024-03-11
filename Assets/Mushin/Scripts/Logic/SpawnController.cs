@@ -15,6 +15,7 @@ public class SpawnController : MonoBehaviour
     private float _timeBetweenSpawn;
     private float _timer;
 
+    private LayerMask _obstaclesLayer;
     private float _xLimit;
     private float _yLimit;
     private int _index;
@@ -38,13 +39,12 @@ public class SpawnController : MonoBehaviour
         CheckMaxEnemies();
         if (_spawnersEnabled && _timer > 0f)
         {
-            Debug.Log("Spawner timer: " + _timer);
             _timer -= Time.deltaTime;
             if (_timer <= 0f)
                 Spawn();
         }
     }
-    
+
     public void Init(GameData data)
     {
         _maxEnemies = data.maxEnemies;
@@ -54,11 +54,11 @@ public class SpawnController : MonoBehaviour
         _yLimit = data.levelLimit.y;
         _index = 0;
         _spawnersEnabled = true;
+        _obstaclesLayer = data.obstaclesLayer;
     }
 
     public void AddSpawner()
     {
-        Debug.Log("Adding spawner");
         var currentTag = _spawnersData[_index].enemyTag;
         _activeSpawners.Add(currentTag);
         if (CanAddSpawner())
@@ -69,7 +69,7 @@ public class SpawnController : MonoBehaviour
     {
         _timer = _timeBetweenSpawn;
     }
-    
+
     private void CheckMaxEnemies()
     {
         if (_currentEnemies >= _maxEnemies && _spawnersEnabled)
@@ -87,7 +87,6 @@ public class SpawnController : MonoBehaviour
 
     private void Spawn()
     {
-        Debug.Log("Spawning enemy");
         ObjectPooler.Instance.SpawnFromPool(GetRandomEnemyTag(), RandomSpawnPos());
         AddEnemy();
         ResetTimer();
@@ -107,11 +106,15 @@ public class SpawnController : MonoBehaviour
 
     private Vector2 RandomSpawnPos()
     {
-        var x = Random.Range(-_xLimit, _xLimit);
-        var y = Random.Range(-_yLimit, _yLimit);
-        return new Vector2(x, y);
+        while (true)
+        {
+            var x = Random.Range(-_xLimit, _xLimit);
+            var y = Random.Range(-_yLimit, _yLimit);
+            if (Physics2D.OverlapCircle(new Vector2(x, y), 1f, _obstaclesLayer)) continue;
+            return new Vector2(x, y);
+        }
     }
-    
+
     public bool CanAddSpawner()
     {
         return _index < _spawnersData.Count;
@@ -119,10 +122,9 @@ public class SpawnController : MonoBehaviour
 
     private void EnableSpawners(bool value)
     {
-        Debug.Log("Enabling spawners");
         _spawnersEnabled = value;
     }
-    
+
     // OLD SPAWNERS BEHAVIOR
     // public Vector2 RandomSpawnPos()
     // {

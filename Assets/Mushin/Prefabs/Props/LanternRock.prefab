@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3584012788551132554}
   - component: {fileID: 3444677177487923559}
   - component: {fileID: 1829185554495130162}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LanternRock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3584012788551132556}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -154,7 +154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4364996914991096784}
   - component: {fileID: 4364996914991096799}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -13,4 +13,6 @@ public class GameData : ScriptableObject
     public int maxEnemies;
     [Tooltip("Límites del nivel")]
     public Vector2 levelLimit;
+    [Tooltip("Obstáculos del nivel que evitará el spawner de enemigos.")]
+    public LayerMask obstaclesLayer;
 }
