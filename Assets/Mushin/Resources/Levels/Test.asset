@@ -15,11 +15,15 @@ MonoBehaviour:
   timeInMinutes: 10
   spawns:
   - enemyTag: enemyWalker
-    minuteToStartSpawning: 0
+    minuteToStartSpawning: 10
   - enemyTag: enemyRunner
-    minuteToStartSpawning: 1
+    minuteToStartSpawning: 8
   - enemyTag: enemyRanged
-    minuteToStartSpawning: 2
+    minuteToStartSpawning: 6
+  spawnParticlesPrefab: {fileID: 0}
   timeBetweenSpawn: 1.5
   maxEnemies: 100
   levelLimit: {x: 56, y: 30}
+  obstaclesLayer:
+    serializedVersion: 2
+    m_Bits: 0

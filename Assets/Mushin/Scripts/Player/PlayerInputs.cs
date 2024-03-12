@@ -35,6 +35,14 @@ public class PlayerInputs:MonoBehaviour
         _player.OnMoveInput(value.Get<Vector2>());
     }
 
+    private void OnSkill1(InputValue value)
+    {
+        _player.OnSkill1Input();
+    }
+    private void OnSkill2(InputValue value)
+    {
+        _player.OnSkill2Input();
+    }
     private void OnDash(InputValue value)
     {
         _player.OnDashInput();

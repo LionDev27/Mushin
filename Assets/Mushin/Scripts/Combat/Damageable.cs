@@ -1,3 +1,4 @@
+using Mushin.Scripts.Commands;
 using UnityEngine;
 
 public abstract class Damageable : MonoBehaviour
@@ -36,6 +37,6 @@ public abstract class Damageable : MonoBehaviour
 
     protected virtual void DieEffects()
     {
-        CameraShake.Instance.Shake(2f);
+        new CameraShakeCommand(2).Execute();
     }
 }

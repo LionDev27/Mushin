@@ -10213,6 +10213,7 @@ GameObject:
   - component: {fileID: 4093944513358459219}
   - component: {fileID: 4078609530571793732}
   - component: {fileID: 864587101}
+  - component: {fileID: 864587127}
   - component: {fileID: 864587113}
   m_Layer: 0
   m_Name: Player
@@ -10457,6 +10458,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _dashShadowSpawner: {fileID: 1664635689}
   _sprite: {fileID: 4093944514426014379}
+--- !u!114 &864587127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4093944513358459247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83f8eaef504c2c1499cde03faef4cc0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseGrenadePrefab: {fileID: 7159783553473074723, guid: c64f208749745da458cd77138acd6615, type: 3}
+  fireGrenadePrefab: {fileID: 291014618791463978, guid: 509105f3d3cb5454fb3042fa660a7c42, type: 3}
+  grenadeSkillData: {fileID: 11400000, guid: 0f607753d12e0584e9a5fd177d1f8b57, type: 2}
 --- !u!114 &864587113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10479,6 +10495,7 @@ MonoBehaviour:
   _playerUpgrades: {fileID: 4078609530571793732}
   _playerMagnet: {fileID: 1779339230}
   _playerVisuals: {fileID: 864587101}
+  _playerSkills: {fileID: 864587127}
 --- !u!1 &4093944514281987842
 GameObject:
   m_ObjectHideFlags: 0

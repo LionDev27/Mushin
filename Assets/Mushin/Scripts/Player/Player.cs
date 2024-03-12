@@ -12,10 +12,13 @@ namespace Mushin.Scripts.Player
         public Action<int> OnLevelUp;
         public Action<UpgradeData> OnUpgradeApplied;
         public Action OnPlayerDead;
+        
         //Inputs
         public abstract void OnMoveInput(Vector2 value);
         public abstract void OnAttackInput(Vector2 dir);
         public abstract void OnDashInput();
+        public abstract void OnSkill1Input();
+        public abstract void OnSkill2Input();
 
         //Events
         public abstract void OnStatsUpdated();

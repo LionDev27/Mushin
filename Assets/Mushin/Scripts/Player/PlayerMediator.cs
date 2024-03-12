@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMediator : Player
 {
     [SerializeField] private PlayerStatsSO _playerStatsData;
-    
+
     [SerializeField] private PlayerInputs _playerInputs;
     [SerializeField] private PlayerMovement _playerMovement;
     [SerializeField] private PlayerAttack _playerAttack;
@@ -15,11 +15,12 @@ public class PlayerMediator : Player
     [SerializeField] private PlayerUpgrades _playerUpgrades;
     [SerializeField] private PlayerMagnet _playerMagnet;
     [SerializeField] private PlayerVisuals _playerVisuals;
+    [SerializeField] private PlayerSkills _playerSkills;
 
     private void Awake()
     {
         CurrentStats = _playerStatsData.Stats;
-        
+
         _playerInputs.Configure(this);
         _playerMovement.Configure(this);
         _playerAttack.Configure(this);
@@ -29,7 +30,8 @@ public class PlayerMediator : Player
         _playerUpgrades.Configure(this);
         _playerMagnet.Configure(this);
         _playerVisuals.Configure(this);
-        
+        _playerSkills.Configure(this);
+
         OnStatsUpdated();
     }
 
@@ -48,6 +50,16 @@ public class PlayerMediator : Player
     public override void OnDashInput()
     {
         _playerDash.TryDash(_playerInputs.AimDir);
+    }
+
+    public override void OnSkill1Input()
+    {
+        _playerSkills.TrySkill(0);
+    }
+
+    public override void OnSkill2Input()
+    {
+        _playerSkills.TrySkill(1);
     }
 
     public override void OnStatsUpdated()
@@ -74,18 +86,20 @@ public class PlayerMediator : Player
     {
         _playerDamageable.Heal(amount);
     }
+
     public override void OnXPOrbCollected(int amount)
     {
         _playerLevel.AddXp(amount);
     }
+
     public override void OnTakeDamage(float damage)
     {
-        _playerMagnet.PlayerCanHeal=true;
+        _playerMagnet.PlayerCanHeal = true;
     }
 
     public override void OnMaxHealth()
     {
-        _playerMagnet.PlayerCanHeal=false;
+        _playerMagnet.PlayerCanHeal = false;
     }
 
     public override void OnShouldAddLife()
