@@ -59,7 +59,7 @@ public class EnemyDamageable : Damageable, IPoolable
         materialPropertyBlock.SetFloat(FlashAmount, 0);
         _sprite.SetPropertyBlock(materialPropertyBlock);
         _agent.EnableNavigation(false);
-        SpawnController.Instance.enemiesKilled++;
+        SpawnController.Instance.enemiesKilled++;//TODO: Lanzar un evento
         SpawnXp();
         SpawnLife();
         ObjectPooler.Instance.ReturnToPool(_poolTag, gameObject);

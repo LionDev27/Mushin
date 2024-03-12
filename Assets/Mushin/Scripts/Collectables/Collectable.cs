@@ -1,5 +1,4 @@
 using Mushin.Scripts.Player;
-using System;
 using UnityEngine;
 
 public class Collectable : MonoBehaviour, IPoolable
