@@ -1,28 +1,33 @@
 using System;
-using TMPro;
+using Mushin.Scripts.Commands;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
     [SerializeField] private PlayerMediator _player;
     [SerializeField] private GameData _gameData;
-    [SerializeField] private TextMeshProUGUI _timerText;
-    [SerializeField] private GameObject _mainCanvas, _endCanvas, _pauseCanvas;
-    [SerializeField] private TextMeshProUGUI _endTitle, _timeSurvived, _enemiesKilled;
-    
-    private SpawnController _spawnController;
-    private float _timer;
-    private bool _runTimer;
-    private float _minutes;
+    [SerializeField] private TimerView _timerView;
 
-    private void OnEnable()
+    private SpawnController _spawnController;
+
+    //private int _playerLevel;
+    private int _enemiesKilled;
+    public Action<int, float, float> OnGameOver;
+    public Action<int, float, float> OnVictory;
+
+    private bool _runTimer;
+    private float _timer;
+    private float _minutes;
+    private float _seconds;
+
+    private void Awake()
     {
-        _player.OnPlayerDead += () => EndGame(false);
+        _player.OnPlayerDead += GameOver;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
-        _player.OnPlayerDead -= () => EndGame(false);
+        _player.OnPlayerDead -= GameOver;
     }
 
     private void Start()
@@ -34,31 +39,40 @@ public class GameController : MonoBehaviour
     {
         RunTimer();
         CheckSpawners();
-        if (Input.GetKeyDown(KeyCode.Escape))
-            TogglePause();
+        CheckVictory();
     }
+
 
     private void StartGame()
     {
+        //meter esto en StartGameplayCommand
+        //ResetPlayer
         AddSpawnController();
         ResetTimer();
-        SetupCanvas();
     }
 
-    private void EndGame(bool win)
+    private void CheckVictory()
     {
-        _mainCanvas.SetActive(false);
-        _endTitle.text = win ? "YOU WIN!" : "GAME OVER";
-        _timeSurvived.text = _timerText.text;
-        _enemiesKilled.text = _spawnController.enemiesKilled.ToString();
-        _endCanvas.SetActive(true);
-        Time.timeScale = 0f;
+        if (_minutes <= 0 && _seconds <= 0)
+        {
+            Victory();
+        }
     }
 
-    public void TogglePause()
+    private void GameOver()
     {
-        _pauseCanvas.SetActive(!_pauseCanvas.activeInHierarchy);
-        Time.timeScale = Time.timeScale == 0f ? 1f : 0f;
+        StopTimer();
+        _enemiesKilled = _spawnController.enemiesKilled;
+        OnGameOver?.Invoke(_enemiesKilled, _minutes, _seconds);
+        ServiceLocator.Instance.GetService<CommandQueue>().AddCommand(new EndGameplayCommand(false));
+    }
+
+    private void Victory()
+    {
+        StopTimer();
+        _enemiesKilled = _spawnController.enemiesKilled;
+        OnVictory?.Invoke(_enemiesKilled, _minutes, _seconds);
+        ServiceLocator.Instance.GetService<CommandQueue>().AddCommand(new EndGameplayCommand(true));
     }
 
     private void AddSpawnController()
@@ -67,49 +81,42 @@ public class GameController : MonoBehaviour
         _spawnController.transform.parent = transform;
         _spawnController.Init(_gameData);
     }
-    
-    private void SetupCanvas()
-    {
-        _mainCanvas.SetActive(true);
-        _endCanvas.SetActive(false);
-        _pauseCanvas.SetActive(false);
-    }
+
 
     private void CheckSpawners()
     {
         if (!_spawnController.CanAddSpawner()) return;
-        if (_minutes >= _spawnController.NextEnemySpawnerMinute)
+        if (_minutes <= _spawnController.NextEnemySpawnerMinute)
+        {
             _spawnController.AddSpawner();
+        }
     }
 
     #region Timers
 
     private void ResetTimer()
     {
-        _timer = 0f;
+        _timer = _gameData.timeInMinutes * 60;
         _runTimer = true;
+
+        _timerView.ResetTime(_timer);
     }
-    
+
+    private void StopTimer()
+    {
+        _runTimer = false;
+    }
+
     private void RunTimer()
     {
         if (!_runTimer) return;
-        _timer += Time.deltaTime;
+
+        _timer -= Time.deltaTime;
+
         _minutes = _timer / 60f;
-        var minutes = Mathf.FloorToInt(_timer / 60f);
-        var seconds = Mathf.FloorToInt(_timer - minutes * 60);
-        _timerText.text = $"{minutes:00}:{seconds:00}";
-        if (minutes >= _gameData.timeInMinutes)
-            EndGame(true);
-    }
+        _seconds = _timer % 60f;
 
-    #endregion
-
-    #region Gizmos
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(Vector3.zero, new Vector3(_gameData.levelLimit.x * 2, _gameData.levelLimit.y * 2, 1f));
+        _timerView.UpdateTime(_minutes, _seconds);
     }
 
     #endregion
