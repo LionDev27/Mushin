@@ -1,17 +1,15 @@
-using System;
-using Mushin.Scripts.Commands;
+﻿using Mushin.Scripts.Commands;
 using Mushin.Scripts.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameOverView : MonoBehaviour
+public class VictoryView : MonoBehaviour
 {
     [SerializeField] private GameObject _panel;
-    [SerializeField] private Button _restartButton;
     [SerializeField] private Button _menuButton;
     [SerializeField] private TextMeshProUGUI _timeSurvived, _enemiesKilled;
-    [SerializeField] private GameController _gameController;
+    [SerializeField]  private GameController _gameController;
     private IGameMenu _gameMenu;
 
     public void Configure(GameMenuMediator gameMenu)
@@ -21,20 +19,25 @@ public class GameOverView : MonoBehaviour
 
     private void Awake()
     {
-        _restartButton.onClick.AddListener(RestartGame);
         _menuButton.onClick.AddListener(GoToMainMenu);
-       
     }
 
     private void OnEnable()
     {
-        _gameController.OnGameOver += Show;
+        _gameController.OnVictory += Show;
     }
 
     private void OnDisable()
     {
-        _gameController.OnGameOver -= Show;
+        _gameController.OnVictory -= Show;
     }
+
+    private void GoToMainMenu()
+    {
+        ServiceLocator.Instance.GetService<CommandQueue>().AddCommand(new LoadSceneCommand("MainMenu"));
+        Hide();
+    }
+
     public void Show(int enemiesKilled, float minutesSurvived, float secondsSurvived)
     {
         UpdateFinalStats(enemiesKilled, minutesSurvived, secondsSurvived);
@@ -50,17 +53,5 @@ public class GameOverView : MonoBehaviour
     {
         _enemiesKilled.text = enemiesKilled.ToString();
         _timeSurvived.text = Statics.FormatTime(minutesSurvived, secondsSurvived);
-    }
-
-    private void GoToMainMenu()
-    {
-        ServiceLocator.Instance.GetService<CommandQueue>().AddCommand(new LoadSceneCommand("MainMenu"));
-        Hide();
-    }
-
-    private void RestartGame()
-    {
-        ServiceLocator.Instance.GetService<CommandQueue>().AddCommand(new StartGameplayCommand());
-        Hide();
     }
 }
