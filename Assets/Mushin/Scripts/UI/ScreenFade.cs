@@ -16,7 +16,7 @@ namespace Mushin.Scripts.Commands
             _image.enabled = false;
         }
 
-        public async Task Show()
+        public async Task FadeIn()
         {
             _isFinished = false;
             _image.SetAlpha(0);
@@ -32,9 +32,11 @@ namespace Mushin.Scripts.Commands
             }
         }
 
-        public async Task Hide()
+        public async Task FadeOut()
         {
             _isFinished = false;
+            _image.SetAlpha(1);
+            _image.enabled = true;
             _image.DOFade(0, .5f).Play().OnComplete(() =>
             {
                 _image.enabled = false;

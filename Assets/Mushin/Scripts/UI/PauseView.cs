@@ -1,51 +1,54 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class PauseView : MonoBehaviour
+namespace Mushin.Scripts.UI
 {
-    [SerializeField] private Button _resumeButton;
-    [SerializeField] private Button _settingsButton;
-    [SerializeField] private Button _restartButton;
-    [SerializeField] private Button _backToMenuButton;
-    private IGameMenu _gameMenu;
-    private void Awake()
+    public class PauseView : MonoBehaviour
     {
-        _resumeButton.onClick.AddListener(OnResume);
-        _settingsButton.onClick.AddListener(OnSettings);
-        _restartButton.onClick.AddListener(OnRestart);
-        _backToMenuButton.onClick.AddListener(OnBackToMenu);
-    }
+        [SerializeField] private Button _resumeButton;
+        [SerializeField] private Button _settingsButton;
+        [SerializeField] private Button _restartButton;
+        [SerializeField] private Button _backToMenuButton;
+        private IGameMenu _gameMenu;
+        private void Awake()
+        {
+            _resumeButton.onClick.AddListener(OnResume);
+            _settingsButton.onClick.AddListener(OnSettings);
+            _restartButton.onClick.AddListener(OnRestart);
+            _backToMenuButton.onClick.AddListener(OnBackToMenu);
+        }
 
 
-    public void Configure(IGameMenu gameMenu)
-    {
-        _gameMenu = gameMenu;
-    }
-    public void Show()
-    {
-        gameObject.SetActive(true);
-    }
+        public void Configure(IGameMenu gameMenu)
+        {
+            _gameMenu = gameMenu;
+        }
+        public void Show()
+        {
+            gameObject.SetActive(true);
+        }
 
-    public void Hide()
-    {
-        gameObject.SetActive(false);
-    }
-    private void OnResume()
-    {
-        _gameMenu.OnResumeButtonPressed();
-    }
-    private void OnSettings()
-    {
-        _gameMenu.OnSettingsButtonPressed();
-    }
-    private void OnRestart()
-    {
-        _gameMenu.OnRestartButtonPressed();
-    }
-    private void OnBackToMenu()
-    {
-        _gameMenu.OnBackToMenuButtonPressed();
-    }
+        public void Hide()
+        {
+            gameObject.SetActive(false);
+        }
+        private void OnResume()
+        {
+            _gameMenu.OnResumeButtonPressed();
+        }
+        private void OnSettings()
+        {
+            _gameMenu.OnSettingsButtonPressed();
+        }
+        private void OnRestart()
+        {
+            _gameMenu.OnRestartButtonPressed();
+        }
+        private void OnBackToMenu()
+        {
+            _gameMenu.OnBackToMenuButtonPressed();
+        }
 
 
+    }
 }
