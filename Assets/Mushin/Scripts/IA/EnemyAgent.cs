@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Mushin.Scripts.Events;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -33,19 +34,13 @@ public abstract class EnemyAgent : MonoBehaviour
         target = FindObjectOfType<PlayerComponents>().transform;
         _spriteFlipper = GetComponentInChildren<TargetDirFlipper>();
     }
-    
-    private void OnDisable()
-    {
-        if (SpawnController.Instance != null)
-            SpawnController.Instance.RemoveEnemy();
-    }
 
     private void OnEnable()
     {
         _damageable.SetHealth(stats.health);
         ChangeState(states[0]);
     }
-
+    
     protected virtual void Start()
     {
         _spriteFlipper.target = target;

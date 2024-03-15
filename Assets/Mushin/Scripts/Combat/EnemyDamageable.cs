@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using DG.Tweening;
-using Mushin.Scripts.Player;
+using Mushin.Scripts.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -59,9 +59,9 @@ public class EnemyDamageable : Damageable, IPoolable
         materialPropertyBlock.SetFloat(FlashAmount, 0);
         _sprite.SetPropertyBlock(materialPropertyBlock);
         _agent.EnableNavigation(false);
-        SpawnController.Instance.enemiesKilled++;//TODO: Lanzar un evento
         SpawnXp();
         SpawnLife();
+        ServiceLocator.Instance.GetService<EventQueue>().EnqueueEvent(new EnemyKilledEventData(transform.position));
         ObjectPooler.Instance.ReturnToPool(_poolTag, gameObject);
     }
 
@@ -121,7 +121,7 @@ public class EnemyDamageable : Damageable, IPoolable
         );
         return pos;
     }
-
+   
     private IEnumerator KnockbackTimer()
     {
         yield return new WaitForSeconds(0.1f);
