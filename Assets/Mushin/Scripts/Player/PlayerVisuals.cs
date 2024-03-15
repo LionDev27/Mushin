@@ -37,4 +37,8 @@ public class PlayerVisuals : MonoBehaviour
     public void SpawnDashShadows() => _dashShadowSpawner.SpawnShadows();
     
     //Manejar animaciones
+    public void Reset()
+    {
+        
+    }
 }

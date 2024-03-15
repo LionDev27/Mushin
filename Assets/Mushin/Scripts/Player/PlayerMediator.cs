@@ -1,4 +1,4 @@
-using System;
+using Mushin.Scripts.Commands;
 using Mushin.Scripts.Player;
 using UnityEngine;
 
@@ -19,8 +19,7 @@ public class PlayerMediator : Player
 
     private void Awake()
     {
-        CurrentStats = _playerStatsData.Stats;
-
+        ResetStats();
         _playerInputs.Configure(this);
         _playerMovement.Configure(this);
         _playerAttack.Configure(this);
@@ -31,11 +30,29 @@ public class PlayerMediator : Player
         _playerMagnet.Configure(this);
         _playerVisuals.Configure(this);
         _playerSkills.Configure(this);
-
-        OnStatsUpdated();
     }
 
+    public override void ResetPlayer() //llamar al inicio del playingState
+    {
+        ResetStats();
+        _playerInputs.Reset();
+        _playerMovement.Reset();
+        _playerAttack.Reset();
+        _playerDash.Reset();
+        _playerDamageable.Reset();
+        _playerLevel.Reset();
+        _playerUpgrades.Reset();
+        _playerMagnet.Reset();
+        _playerVisuals.Reset();
+        _playerSkills.Reset();
+        
+    }
 
+    private void ResetStats()
+    {
+        CurrentStats = _playerStatsData.Stats;
+        OnStatsUpdated();
+    }
     public override void OnMoveInput(Vector2 value)
     {
         _playerMovement.MoveDir = value;
@@ -68,7 +85,7 @@ public class PlayerMediator : Player
         _playerAttack.Stats = CurrentStats;
         _playerDash.Stats = CurrentStats;
         _playerDamageable.IsInvulnerable = false;
-        Time.timeScale = 1;
+        new ResumeGameCommand().Execute();
     }
 
     public override void OnIsDashing(bool dashing)
@@ -116,6 +133,6 @@ public class PlayerMediator : Player
     {
         _playerInputs.EnableInputs(false);
         _playerDamageable.IsInvulnerable = true;
-        Time.timeScale = 0;
+        new PauseGameCommand().Execute();
     }
 }

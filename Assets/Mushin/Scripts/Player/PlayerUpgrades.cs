@@ -76,5 +76,9 @@ public class PlayerUpgrades : MonoBehaviour
         _player.OnUpgradeApplied?.Invoke(data);
     }
 
-    
+
+    public void Reset()
+    {
+        
+    }
 }

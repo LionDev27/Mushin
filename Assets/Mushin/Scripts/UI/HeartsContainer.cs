@@ -12,12 +12,14 @@ public class HeartsContainer : MonoBehaviour
     private int LastHeartIndex => _hearts.Count - 1;
     private int _enabledHearts;
 
+    public static Action<int> OnSetHearts;
     public static Action OnAddHeart;
     public static Action<bool> OnEnableHeart;
     public static Action OnRemoveHeart;
 
     private void OnEnable()
     {
+        OnSetHearts += SetHearts;
         OnAddHeart += AddHeart;
         OnEnableHeart += EnableHeart;
         OnRemoveHeart += RemoveHeart;
@@ -25,6 +27,7 @@ public class HeartsContainer : MonoBehaviour
 
     private void OnDisable()
     {
+        OnSetHearts -= SetHearts;
         OnAddHeart -= AddHeart;
         OnEnableHeart -= EnableHeart;
         OnRemoveHeart -= RemoveHeart;
@@ -37,6 +40,15 @@ public class HeartsContainer : MonoBehaviour
         EnableHeart(true);
     }
 
+    private void SetHearts(int heartsAmount)
+    {
+        _hearts.Clear();
+        transform.DestroyAllChildren();
+        for (int i = 0; i < heartsAmount; i++)
+        {
+            AddHeart();
+        }
+    }
     private void EnableHeart(bool value)
     {
         _enabledHearts += value ? 1 : -1;

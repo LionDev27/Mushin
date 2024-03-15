@@ -30,9 +30,7 @@ public class PlayerLevel : MonoBehaviour
 
     private void Start()
     {
-        _currentXP = 0;
-        _currentXPNeeded = _startingXPNeeded;
-        _currentLevel = 1;
+        Reset();
     }
 
     public void AddXp(int xp)
@@ -85,5 +83,13 @@ public class PlayerLevel : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _repelMaxDistance);
+    }
+
+    public void Reset()
+    {
+        _currentXP = 0;
+        _currentXPNeeded = _startingXPNeeded;
+        _currentLevel = 1;
+        _player.OnLevelReset?.Invoke(_startingXPNeeded);
     }
 }

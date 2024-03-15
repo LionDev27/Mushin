@@ -34,6 +34,7 @@ public class PlayerUI : MonoBehaviour
         _player.OnDashesUpdated += UpdateDashUI;
         _player.OnXpUpdated += UpdateXpUI;
         _player.OnLevelUp += UpdateLevelUI;
+        _player.OnLevelReset += ResetUI;
         _player.OnUpgradeApplied += UpgradeComplete;
     }
 
@@ -78,6 +79,12 @@ public class PlayerUI : MonoBehaviour
         _xpText.text = $"{xp} / {xpNeeded}";
     }
 
+    private void ResetUI(int startingXPNeeded)
+    {
+        _levelText.text = "Level: 1";
+        UpdateXpUI(0, startingXPNeeded);
+        ConfigureDashCanvas();
+    }
     private void UpdateLevelUI(int level)
     {
         _levelText.text = $"Level: {level}";

@@ -1,5 +1,6 @@
-using System;
 using System.Collections;
+using Mushin.Scripts.Commands;
+using Mushin.Scripts.Events;
 using Mushin.Scripts.Player;
 using UnityEngine;
 
@@ -22,10 +23,13 @@ public class PlayerDamageable : Damageable
 
     private void Start()
     {
-        _invulnerabilityTime = _player.CurrentStats.invulnerabilitySeconds;
-        SetHealth(_player.CurrentStats.health);
-        for (int i = 0; i < _currentHealth; i++)
-            HeartsContainer.OnAddHeart?.Invoke();
+        //Reset();
+    }
+
+    public override void SetHealth(float amount)
+    {
+        base.SetHealth(amount);
+        HeartsContainer.OnSetHearts((int)amount);
     }
 
     private void Update()
@@ -92,11 +96,12 @@ public class PlayerDamageable : Damageable
     protected override void Die()
     {
         base.Die();
-        _player.OnPlayerDead?.Invoke();
+        ServiceLocator.Instance.GetService<EventQueue>().EnqueueEvent(new PlayerKilledEventData(transform.position));
     }
 
     private IEnumerator HitAnimation()
     {
+        new CameraShakeCommand(4).Execute();
         while (!InvulnerabilityEnded())
         {
             _sprite.SetActive(false);
@@ -104,5 +109,15 @@ public class PlayerDamageable : Damageable
             _sprite.SetActive(true);
             yield return new WaitForSeconds(0.1f);
         }
+    }
+
+    public void Reset()
+    {
+        _isInvulnerable = false;
+        _invulnerabilityTime = _player.CurrentStats.invulnerabilitySeconds;
+        StopCoroutine(HitAnimation());
+        _sprite.SetActive(true);
+        SetHealth(_player.CurrentStats.health);
+        
     }
 }

@@ -74,4 +74,9 @@ public class PlayerSkills : MonoBehaviour
     {
         return skillIndex < 0 || skillIndex >= skillSlots.Length;
     }
+
+    public void Reset()
+    {
+        
+    }
 }

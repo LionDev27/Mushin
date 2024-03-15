@@ -11,8 +11,8 @@ namespace Mushin.Scripts.Player
         public Action<int,int> OnXpUpdated;
         public Action<int> OnLevelUp;
         public Action<UpgradeData> OnUpgradeApplied;
-        public Action OnPlayerDead;
-        
+        public Action<int> OnLevelReset; 
+
         //Inputs
         public abstract void OnMoveInput(Vector2 value);
         public abstract void OnAttackInput(Vector2 dir);
@@ -30,5 +30,6 @@ namespace Mushin.Scripts.Player
         public abstract void OnShouldAddLife();
         public abstract void OnDashUpgrade();
         public abstract void OnStartLevelingUp();
+        public abstract void ResetPlayer();
     }
 }

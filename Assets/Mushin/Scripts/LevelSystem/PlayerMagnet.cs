@@ -43,4 +43,9 @@ public class PlayerMagnet : MonoBehaviour
                 collectable.RemoveTarget();
         }
     }
+
+    public void Reset()
+    {
+        
+    }
 }

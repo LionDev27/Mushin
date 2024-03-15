@@ -1,4 +1,3 @@
-using System;
 using Mushin.Scripts.Player;
 using UnityEngine;
 
@@ -49,5 +48,10 @@ public class PlayerMovement : MonoBehaviour
     public void EnableMovement(bool value)
     {
         canMove = value;
+    }
+
+    public void Reset()
+    {
+        EnableMovement(true);
     }
 }

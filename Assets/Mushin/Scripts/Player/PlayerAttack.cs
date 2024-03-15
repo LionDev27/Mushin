@@ -40,7 +40,6 @@ public class PlayerAttack : MonoBehaviour
     {
         if (!CanAttack)
             RunTimer();
-        
     }
 
     public void Attack(Vector2 dir)
@@ -101,5 +100,12 @@ public class PlayerAttack : MonoBehaviour
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireCube(transform.position, Vector2.one + _offset);
+    }
+
+    public void Reset()
+    {
+        _timer = 0;
+        IsPlayerDashing = false;
+        UpdateStats(1);
     }
 }

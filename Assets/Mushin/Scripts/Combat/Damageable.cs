@@ -6,7 +6,7 @@ public abstract class Damageable : MonoBehaviour
     protected float _maxHealth;
     protected float _currentHealth;
 
-    public void SetHealth(float amount)
+    public virtual void SetHealth(float amount)
     {
         _maxHealth = amount;
         _currentHealth = _maxHealth;

@@ -1,4 +1,3 @@
-using System;
 using Mushin.Scripts.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -111,6 +110,10 @@ public class PlayerInputs:MonoBehaviour
     public bool IsMoving()
     {
         return MoveDirection != Vector2.zero;
+    }
+
+    public void Reset()
+    {
     }
 }
 

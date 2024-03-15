@@ -1,4 +1,3 @@
-using System;
 using Mushin.Scripts.Player;
 using UnityEngine;
 using UnityEngine.UI;
@@ -101,5 +100,11 @@ public class PlayerDash : MonoBehaviour
     {
         if (_dashRecoveryTimer > _stats.dashCooldown)
             _dashRecoveryTimer = 0;
+    }
+
+    public void Reset()
+    {
+        ResetDashes();
+        ResetCooldown();
     }
 }
