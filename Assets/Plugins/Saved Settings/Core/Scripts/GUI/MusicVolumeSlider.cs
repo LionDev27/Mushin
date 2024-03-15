@@ -12,7 +12,8 @@ namespace GUI
         void Start()
         {
             Slider slider = GetComponent<Slider>();
-            LoadValue();
+            //LoadValue();
+            slider.value = 1;
             slider.onValueChanged.AddListener(delegate { SettingsHelper.MusicVolume = slider.value; });
         }
 
