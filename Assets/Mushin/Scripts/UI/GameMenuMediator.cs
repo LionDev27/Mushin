@@ -1,82 +1,118 @@
 ﻿using Mushin.Scripts.Commands;
+using Mushin.Scripts.Events;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class GameMenuMediator : MonoBehaviour, IGameMenu
+namespace Mushin.Scripts.UI
 {
-    [SerializeField] private PauseView _pauseView;
-    [SerializeField] private GameOverView _gameOverView;
-    [SerializeField] private VictoryView _victoryView;
-    private CommandQueue _commandQueue;
-    private bool _isPaused;
-    private void Awake()
+    public class GameMenuMediator : MonoBehaviour, IGameMenu, IEventObserver
     {
-        _isPaused = false;
-        
-        _pauseView.Configure(this);
-        _gameOverView.Configure(this);
-        _victoryView.Configure(this);
-    }
+        [SerializeField] private PauseView _pauseView;
+        [SerializeField] private GameOverView _gameOverView;
+        [SerializeField] private VictoryView _victoryView;
 
-    private void Start()
-    {
-        _commandQueue=ServiceLocator.Instance.GetService<CommandQueue>();
-        HideAllMenus();
-    }
+        private CommandQueue _commandQueue;
+        private EventQueue _eventQueue;
 
-    private void HideAllMenus()
-    {
-        _pauseView.Hide();
-        _gameOverView.Hide();
-        _victoryView.Hide();
-    }
+        private bool _isPaused;
 
-    private void OnEscape(InputValue value)
-    {
-        TogglePause();
-    }
-
-    private void TogglePause()
-    {
-        if (_isPaused)
+        private void Awake()
         {
-            OnResumeButtonPressed();
-        }
-        else
-        {
-            OnPauseButtonPressed();
+            _isPaused = false;
+
+            _pauseView.Configure(this);
+            _gameOverView.Configure(this);
+            _victoryView.Configure(this);
         }
 
-        _isPaused = !_isPaused;
-    }
-    public void OnPauseButtonPressed()
-    {
-        _pauseView.Show();
-        _commandQueue.AddCommand(new PauseGameCommand());
-    }
+        private void Start()
+        {
+            _commandQueue = ServiceLocator.Instance.GetService<CommandQueue>();
+            _eventQueue = ServiceLocator.Instance.GetService<EventQueue>();
 
-    public void OnResumeButtonPressed()
-    {
-        _commandQueue.AddCommand(new ResumeGameCommand());
-        _pauseView.Hide();
-    }
+            _eventQueue.Subscribe(EventIds.GAMEOVER, this);
+            _eventQueue.Subscribe(EventIds.VICTORY, this);
+            HideAllMenus();
+        }
 
-    public void OnSettingsButtonPressed()
-    {
-    }
+        private void OnDestroy()
+        {
+            _eventQueue.Unsubscribe(EventIds.GAMEOVER, this);
+            _eventQueue.Unsubscribe(EventIds.VICTORY, this);
+        }
 
-    public void OnRestartButtonPressed()
-    {
-        HideAllMenus();
-        _commandQueue.AddCommand(new ResumeGameCommand());
-        _commandQueue.AddCommand(new EndGameplayCommand(false));
-        _commandQueue.AddCommand(new StartGameplayCommand());
-    }
+        private void HideAllMenus()
+        {
+            _pauseView.Hide();
+            _gameOverView.Hide();
+            _victoryView.Hide();
+        }
 
-    public void OnBackToMenuButtonPressed()
-    {
-        _commandQueue.AddCommand(new LoadSceneCommand("MainMenu"));
-        _commandQueue.AddCommand(new ResumeGameCommand());
+        private void OnEscape(InputValue value)
+        {
+            TogglePause();
+        }
+
+        private void TogglePause()
+        {
+            if (_isPaused)
+            {
+                OnResumeButtonPressed();
+            }
+            else
+            {
+                OnPauseButtonPressed();
+            }
+
+            _isPaused = !_isPaused;
+        }
+
+        public void OnPauseButtonPressed()
+        {
+            _pauseView.Show();
+            _commandQueue.AddCommand(new PauseGameCommand());
+        }
+
+        public void OnResumeButtonPressed()
+        {
+            _commandQueue.AddCommand(new ResumeGameCommand());
+            _pauseView.Hide();
+        }
+
+        public void OnSettingsButtonPressed()
+        {
+        }
+
+        public void OnRestartButtonPressed()
+        {
+            //_commandQueue.AddCommand(new LoadGameSceneCommand());
+            HideAllMenus();
+            _commandQueue.AddCommand(new ResumeGameCommand());
+            // _commandQueue.AddCommand(new EndGameplayCommand(false));
+            _commandQueue.AddCommand(new StartGameplayCommand());
+        }
+
+        public void OnBackToMenuButtonPressed()
+        {
+            _commandQueue.AddCommand(new LoadSceneCommand("MainMenu"));
+            _commandQueue.AddCommand(new ResumeGameCommand());
+        }
+
+        public void ProcessEvents(EventData eventData)
+        {
+            if (eventData.EventId == EventIds.GAMEOVER)
+            {
+                var gameOverData = (GameOverEventData)eventData;
+                _gameOverView.Show(gameOverData.EnemiesKilled, gameOverData.MinutesRemaining, gameOverData.SecondsRemaining);
+                return;
+            }
+
+            if (eventData.EventId == EventIds.VICTORY)
+            {
+                var victoryData = (VictoryEventData)eventData;
+                _victoryView.Show(victoryData.EnemiesKilled, victoryData.MinutesRemaining, victoryData.SecondsRemaining);
+                return;
+            }
+        }
     }
-    
 }

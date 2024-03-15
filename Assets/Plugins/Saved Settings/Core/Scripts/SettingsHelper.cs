@@ -15,7 +15,7 @@ public class SettingsHelper : MonoBehaviour
     public static float ParticleMultiplier = 1f;
     public static float ParticleLifeTimeMultiplier = 1f;
     public static AudioMixer _MasterAudioMixer;
-    public const string MASTER_MIXER_PATH = "Audio/MasterMixer";
+    public const string MASTER_MIXER_PATH = "Melenitas Dev/Sounds Good/Outputs/Master";
     const float VOLUME_DIFFERENCE = 80f;
 
     #endregion
@@ -34,9 +34,9 @@ public class SettingsHelper : MonoBehaviour
             {
                 _MasterAudioMixer = Resources.Load<AudioMixer>(MASTER_MIXER_PATH);
             }
-            float volume = 0f;
-            _MasterAudioMixer.GetFloat("MasterVolume", out volume);
-            return (volume + VOLUME_DIFFERENCE) * 0.01f;
+
+            _MasterAudioMixer.GetFloat("Master", out var volume);
+            return volume;
         }
         set
         {
@@ -44,7 +44,8 @@ public class SettingsHelper : MonoBehaviour
             {
                 _MasterAudioMixer = Resources.Load<AudioMixer>(MASTER_MIXER_PATH);
             }
-            _MasterAudioMixer.SetFloat("MasterVolume", (value * 100f) - VOLUME_DIFFERENCE);
+
+            _MasterAudioMixer.SetFloat("Master", Mathf.Log10(Mathf.Clamp(value, .0001f, 1f)) * 20);
         }
     }
 
@@ -60,9 +61,9 @@ public class SettingsHelper : MonoBehaviour
             {
                 _MasterAudioMixer = Resources.Load<AudioMixer>(MASTER_MIXER_PATH);
             }
-            float volume = 0f;
-            _MasterAudioMixer.GetFloat("MusicVolume", out volume);
-            return (volume + VOLUME_DIFFERENCE) * 0.01f;
+
+            _MasterAudioMixer.GetFloat("Music", out var volume);
+            return volume;
         }
         set
         {
@@ -70,7 +71,8 @@ public class SettingsHelper : MonoBehaviour
             {
                 _MasterAudioMixer = Resources.Load<AudioMixer>(MASTER_MIXER_PATH);
             }
-            _MasterAudioMixer.SetFloat("MusicVolume", (value * 100f) - VOLUME_DIFFERENCE);
+
+            _MasterAudioMixer.SetFloat("Music", Mathf.Log10(Mathf.Clamp(value, .0001f, 1f)) * 20);
         }
     }
 
@@ -86,9 +88,9 @@ public class SettingsHelper : MonoBehaviour
             {
                 _MasterAudioMixer = Resources.Load<AudioMixer>(MASTER_MIXER_PATH);
             }
-            float volume = 0f;
-            _MasterAudioMixer.GetFloat("SoundEffectVolume", out volume);
-            return (volume + VOLUME_DIFFERENCE) * 0.01f;
+
+            _MasterAudioMixer.GetFloat("SFX", out var volume);
+            return volume;
         }
         set
         {
@@ -96,7 +98,8 @@ public class SettingsHelper : MonoBehaviour
             {
                 _MasterAudioMixer = Resources.Load<AudioMixer>(MASTER_MIXER_PATH);
             }
-            _MasterAudioMixer.SetFloat("SoundEffectVolume", (value * 100f) - VOLUME_DIFFERENCE);
+
+            _MasterAudioMixer.SetFloat("SFX", Mathf.Log10(Mathf.Clamp(value, .0001f, 1f)) * 20);
         }
     }
 
@@ -109,14 +112,8 @@ public class SettingsHelper : MonoBehaviour
     /// </summary>
     public static int TextureQuality
     {
-        get
-        {
-            return QualitySettings.masterTextureLimit;
-        }
-        set
-        {
-            QualitySettings.masterTextureLimit = value;
-        }
+        get { return QualitySettings.masterTextureLimit; }
+        set { QualitySettings.masterTextureLimit = value; }
     }
 
     /// <summary>
@@ -125,14 +122,8 @@ public class SettingsHelper : MonoBehaviour
     /// </summary>
     public static int AntiAliasing
     {
-        get
-        {
-            return QualitySettings.antiAliasing;
-        }
-        set
-        {
-            QualitySettings.antiAliasing = value;
-        }
+        get { return QualitySettings.antiAliasing; }
+        set { QualitySettings.antiAliasing = value; }
     }
 
     /// <summary>
@@ -141,14 +132,8 @@ public class SettingsHelper : MonoBehaviour
     public static bool FullScreen
     {
 #if UNITY_STANDALONE_WIN || UNITY_WSA || UNITY_STANDALONE_OSX || UNITY_STANDALONE_LINUX || UNITY_WEBGL
-        get
-        {
-            return Screen.fullScreen;
-        }
-        set
-        {
-            Screen.fullScreen = value;
-        }
+        get { return Screen.fullScreen; }
+        set { Screen.fullScreen = value; }
 #endif
     }
 
@@ -158,14 +143,8 @@ public class SettingsHelper : MonoBehaviour
     public static Resolution ResolutionOfWindow
     {
 #if UNITY_STANDALONE_WIN || UNITY_WSA || UNITY_STANDALONE_OSX || UNITY_STANDALONE_LINUX || UNITY_WEBGL
-        get
-        {
-            return Screen.currentResolution;
-        }
-        set
-        {
-            Screen.SetResolution(value.width, value.height, FullScreen);
-        }
+        get { return Screen.currentResolution; }
+        set { Screen.SetResolution(value.width, value.height, FullScreen); }
 #endif
     }
 
@@ -175,13 +154,9 @@ public class SettingsHelper : MonoBehaviour
     public static bool VSync
     {
 #if UNITY_STANDALONE_WIN || UNITY_WSA || UNITY_STANDALONE_OSX || UNITY_STANDALONE_LINUX || UNITY_WEBGL
-        get
-        {
-            return QualitySettings.vSyncCount > 0;
-        }
+        get { return QualitySettings.vSyncCount > 0; }
         set
         {
-
             if (value)
             {
                 QualitySettings.vSyncCount = 1;
@@ -202,14 +177,8 @@ public class SettingsHelper : MonoBehaviour
     /// </summary>
     public static ShadowQuality ShadowQuality
     {
-        get
-        {
-            return QualitySettings.shadows;
-        }
-        set
-        {
-            QualitySettings.shadows = value;
-        }
+        get { return QualitySettings.shadows; }
+        set { QualitySettings.shadows = value; }
     }
 
     /// <summary>
@@ -221,14 +190,8 @@ public class SettingsHelper : MonoBehaviour
     /// </summary>
     public static ShadowResolution ShadowsResolution
     {
-        get
-        {
-            return QualitySettings.shadowResolution;
-        }
-        set
-        {
-            QualitySettings.shadowResolution = value;
-        }
+        get { return QualitySettings.shadowResolution; }
+        set { QualitySettings.shadowResolution = value; }
     }
 
     /// <summary>
@@ -238,14 +201,8 @@ public class SettingsHelper : MonoBehaviour
     /// </summary>
     public static int ShadowCascades
     {
-        get
-        {
-            return QualitySettings.shadowCascades;
-        }
-        set
-        {
-            QualitySettings.shadowCascades = value;
-        }
+        get { return QualitySettings.shadowCascades; }
+        set { QualitySettings.shadowCascades = value; }
     }
 
     /// <summary>
@@ -253,20 +210,14 @@ public class SettingsHelper : MonoBehaviour
     /// </summary>
     public static bool SoftParticles
     {
-        get
-        {
-            return QualitySettings.softParticles;
-        }
-        set
-        {
-            QualitySettings.softParticles = value;
-        }
+        get { return QualitySettings.softParticles; }
+        set { QualitySettings.softParticles = value; }
     }
 
     /// <summary>
     /// Discard's the current settings for the last settings saved.
     /// </summary>
-    public static void DiscardChanges ()
+    public static void DiscardChanges()
     {
         TextureQuality = _LastData.textureQuality;
         AntiAliasing = _LastData.antiAliasing;
@@ -288,7 +239,7 @@ public class SettingsHelper : MonoBehaviour
     /// <summary>
     /// Resets the current settings to the initial default settings.
     /// </summary>
-    public static void ResetData ()
+    public static void ResetData()
     {
         TextureQuality = _DefaultData.textureQuality;
         AntiAliasing = _DefaultData.antiAliasing;
@@ -334,7 +285,7 @@ public class SettingsHelper : MonoBehaviour
     }
 
     #endregion
-        
+
     #region Load Settings
 
     [System.Serializable]
@@ -364,9 +315,9 @@ public class SettingsHelper : MonoBehaviour
     void Awake()
     {
         //Save default settings
-        _DefaultData.masterVolume = MasterVolume;
-        _DefaultData.musicVolume = MusicVolume;
-        _DefaultData.soundEffectVolume = SoundEffectVolume;
+        // _DefaultData.masterVolume = MasterVolume;
+        // _DefaultData.musicVolume = MusicVolume;
+        // _DefaultData.soundEffectVolume = SoundEffectVolume;
         _DefaultData.textureQuality = TextureQuality;
         _DefaultData.antiAliasing = AntiAliasing;
         _DefaultData.shadowQuality = ShadowQuality;
@@ -416,6 +367,7 @@ public class SettingsHelper : MonoBehaviour
 #endif
         }
     }
+
     static SettingsData _LastData;
     static SettingsData _DefaultData;
 
@@ -425,9 +377,12 @@ public class SettingsHelper : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        MasterVolume = _LastData.masterVolume;
-        MusicVolume = _LastData.musicVolume;
-        SoundEffectVolume = _LastData.soundEffectVolume;
+        // MasterVolume = _LastData.masterVolume;
+        // MusicVolume = _LastData.musicVolume;
+        // SoundEffectVolume = _LastData.soundEffectVolume;
+        _DefaultData.masterVolume = 0;
+        _DefaultData.musicVolume = 0;
+        _DefaultData.soundEffectVolume  = 0;
     }
 
     #endregion

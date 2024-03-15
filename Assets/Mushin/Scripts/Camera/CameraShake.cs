@@ -1,20 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
-[RequireComponent(typeof(CinemachineImpulseSource))]
-public class CameraShake : MonoBehaviour
+namespace Mushin.Scripts.Camera
 {
-    private CinemachineImpulseSource _impulseSource;
-
-    private void Awake()
+    [RequireComponent(typeof(CinemachineImpulseSource))]
+    public class CameraShake : MonoBehaviour
     {
-        _impulseSource = GetComponent<CinemachineImpulseSource>();
-    }
+        private CinemachineImpulseSource _impulseSource;
+        private void Awake()
+        {
+            _impulseSource = GetComponent<CinemachineImpulseSource>();
+        }
 
-    public void Shake(float intensity = 1f)
-    {
-        _impulseSource.GenerateImpulse(intensity);
+        public void Shake(float intensity = 1f)
+        {
+            _impulseSource.GenerateImpulse(intensity);
+        }
     }
 }

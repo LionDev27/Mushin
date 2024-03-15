@@ -7,12 +7,13 @@ using Random = UnityEngine.Random;
 public class SpawnController : MonoBehaviour
 {
     public float NextEnemySpawnerMinute => _spawnersData[_index].minuteToStartSpawning;
-    [HideInInspector] public int enemiesKilled;
-    
+
     private const string SPAWN_PARTICLES_TAG = "spawnParticles";
 
-    private List<EnemySpawn> _spawnersData = new();
-    private List<string> _activeSpawners = new();
+    private GameData _gameData;
+
+    private List<EnemySpawn> _spawnersData;
+    private List<string> _activeSpawners;
     private int _maxEnemies;
     private int _currentEnemies;
     private float _timeBetweenSpawn;
@@ -24,12 +25,10 @@ public class SpawnController : MonoBehaviour
     private int _index;
     private bool _spawnersEnabled;
 
-    public static SpawnController Instance;
-
     private void Awake()
     {
-        if (!Instance)
-            Instance = this;
+        _spawnersData = new();
+        _activeSpawners = new();
     }
 
     private void Start()
@@ -50,6 +49,7 @@ public class SpawnController : MonoBehaviour
 
     public void Init(GameData data)
     {
+        _gameData = data;
         _maxEnemies = data.maxEnemies;
         _timeBetweenSpawn = data.timeBetweenSpawn;
         _spawnersData = data.spawns;

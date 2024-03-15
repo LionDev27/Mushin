@@ -51,8 +51,9 @@ public class ServiceLocator
         if (_services.ContainsKey(type))
         {
             _services.Remove(type);
+            return;
         }
 
-        throw new Exception($"Service {type} is not registered");
+        Debug.LogWarning($"Service {type} is not registered");
     }
 }
