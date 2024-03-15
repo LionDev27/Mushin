@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Mushin.Scripts.GameStates
+﻿namespace Mushin.Scripts.GameStates
 {
     public class InitialState : IGameState
     {

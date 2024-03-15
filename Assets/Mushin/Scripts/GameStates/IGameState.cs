@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Mushin.Scripts.GameStates
+﻿namespace Mushin.Scripts.GameStates
 {
     public interface IGameState
     {

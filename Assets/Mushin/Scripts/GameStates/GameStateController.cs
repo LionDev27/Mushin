@@ -1,28 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Mushin.Scripts.GameStates
 {
     public class GameStateController : MonoBehaviour
     {
         private IGameState _currentState;
-        private Dictionary<GameStatesIds, IGameState> _idToGameState;
+        public GameData GameData { get; private set; }
 
-        private void Awake()
+        public void Init(GameData gameData)
         {
-            _idToGameState = new Dictionary<GameStatesIds, IGameState>
-            {
-                { GameStatesIds.INITIAL, new InitialState() },
-                { GameStatesIds.PLAYING, new PlayingState() },
-                { GameStatesIds.GAMEOVER, new GameOverState() },
-                { GameStatesIds.VICTORY, new VictoryState() },
-            };
+            GameData = gameData;
         }
 
         private void Start()
         {
-            _currentState = GetState(GameStatesIds.INITIAL);
+            _currentState = new InitialState();
+            _currentState.Start();
         }
 
         private void Update()
@@ -32,19 +25,14 @@ namespace Mushin.Scripts.GameStates
 
         private void Reset()
         {
-            SwitchState(GameStatesIds.INITIAL);
+            SwitchState(new InitialState());
         }
 
-        public void SwitchState(GameStatesIds newGameStateIds)
+        public void SwitchState(IGameState newGameState)
         {
             _currentState.Stop();
-            _currentState = GetState(newGameStateIds);
+            _currentState = newGameState;
             _currentState.Start();
-        }
-
-        private IGameState GetState(GameStatesIds gameStateIds)
-        {
-            return _idToGameState[gameStateIds];
         }
 
         private void OnDestroy()
