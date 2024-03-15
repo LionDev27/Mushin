@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Mushin.Scripts.Commands
 {
-    public class PauseGameCommand:ICommand
+    public class PauseGameCommand : ICommand
     {
         public Task Execute()
         {

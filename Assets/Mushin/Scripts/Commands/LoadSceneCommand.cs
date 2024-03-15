@@ -13,11 +13,13 @@ namespace Mushin.Scripts.Commands
         }
         public async Task Execute()
         {
+            await new FadeInCommand().Execute();
             var loadingScreen = ServiceLocator.Instance.GetService<LoadingScreen>();
             loadingScreen.Show();
             await LoadScene(_sceneName);
-            await Task.Delay(1000);
+            //await Task.Delay(500);
             loadingScreen.Hide();
+            await new FadeOutCommand().Execute();
         }
 
         private async Task LoadScene(string sceneName)

@@ -2,10 +2,10 @@ using System.Threading.Tasks;
 
 namespace Mushin.Scripts.Commands
 {
-    public class HideScreenFadeCommand:ICommand{
+    public class FadeOutCommand:ICommand{
         public async Task Execute()
         {
-            await ServiceLocator.Instance.GetService<ScreenFade>().Hide();
+            await ServiceLocator.Instance.GetService<ScreenFade>().FadeOut();
         }
     }
 }
